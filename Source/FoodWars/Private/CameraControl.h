@@ -23,4 +23,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+private:
+	UPROPERTY(EditAnywhere, Category="Turn Change Speed")
+	float rotationSpeed = 1.0f; 
+	float moveSpeed = 1.0f; 
+
+	UPROPERTY(EditAnywhere, Category = "Position Handler")
+	FVector startPosition; 
+
+
 };
