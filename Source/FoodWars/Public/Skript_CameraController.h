@@ -3,18 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "CameraControl.generated.h"
+#include "GameFramework/Pawn.h"
+#include "Skript_CameraController.generated.h"
 
 UCLASS()
-class ACameraControl : public AActor
+class FOODWARS_API ASkript_CameraController : public APawn
 {
 	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	ACameraControl();
 
+public:
+	// Sets default values for this pawn's properties
+	ASkript_CameraController();
 
 protected:
 	// Called when the game starts or when spawned
@@ -24,19 +23,20 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void changePlayerView(float time); 
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void changePlayerView(float time);
 
 private:
-	UPROPERTY(EditAnywhere, Category="Turn Change Speed")
-	float rotationSpeed = 1.0f; 
 	UPROPERTY(EditAnywhere, Category = "Turn Change Speed")
-	float moveSpeed = 1.0f; 
- 
+	float rotationSpeed = 1.0f;
+	UPROPERTY(EditAnywhere, Category = "Turn Change Speed")
+	float moveSpeed = 1.0f;
+
 	UPROPERTY(EditAnywhere, Category = "Position Handler")
 	TArray<FVector> playerPositions;
 
 	UPROPERTY(EditAnywhere, Category = "Rotation Handler")
 	TArray<FRotator> viewRotations;
-
-	int32 posIndex = 0; 
+	int32 posIndex = 0;
 };
