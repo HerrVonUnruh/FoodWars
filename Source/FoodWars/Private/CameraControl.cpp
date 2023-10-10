@@ -21,27 +21,30 @@ void ACameraControl::BeginPlay()
 void ACameraControl::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	changePlayerView();
+	changePlayerView(DeltaTime);
 }
 
-void ACameraControl::changePlayerView()
+void ACameraControl::changePlayerView(float time)
 {
 	FVector currentLocation = GetActorLocation();
+	FRotator currentRotation = GetActorRotation();
+	FRotator newRotation; 
+	float alpha = 0.1f; 
 	if(FVector::Distance(currentLocation, playerPositions[posIndex]) < 10.0f)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Habe Punkt erreicht! CameraControl: %s"), *FString::Printf(TEXT("Wert: %d"), 42));
-
-	 if(posIndex < 3)
-	 {
-		 posIndex++;
-	 } else 
-	 {
-		 posIndex = 0; 
-	 }
+		if(posIndex < 3)
+		{
+			posIndex++;
+		} else 
+		{
+			posIndex = 0; 
+		}
 	} 
 	FVector direction = playerPositions[posIndex] - currentLocation;
 	FVector dirNormalized = direction.GetSafeNormal();
-	currentLocation += dirNormalized * moveSpeed;
+	newRotation = FMath::Lerp(currentRotation, viewRotations[posIndex], alpha*time);
+	currentLocation += dirNormalized * moveSpeed * time;
 	SetActorLocation(currentLocation);
+	SetActorRotation(newRotation); 
 ; 
 }

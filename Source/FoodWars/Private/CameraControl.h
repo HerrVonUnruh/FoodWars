@@ -24,18 +24,19 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void changePlayerView(); 
+	void changePlayerView(float time); 
 
 private:
 	UPROPERTY(EditAnywhere, Category="Turn Change Speed")
 	float rotationSpeed = 1.0f; 
 	UPROPERTY(EditAnywhere, Category = "Turn Change Speed")
 	float moveSpeed = 1.0f; 
-
-	UPROPERTY(EditAnywhere, Category = "Position Handler")
-	FVector startPosition; 
+ 
 	UPROPERTY(EditAnywhere, Category = "Position Handler")
 	TArray<FVector> playerPositions;
+
+	UPROPERTY(EditAnywhere, Category = "Rotation Handler")
+	TArray<FRotator> viewRotations;
 
 	int32 posIndex = 0; 
 };
