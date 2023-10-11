@@ -29,9 +29,14 @@ public:
 
 	void OnChangeTurn();
 
+	void rotateRight(); 
+	void rotateLeft();
+	void resetRotation();
 private:
 	UPROPERTY(EditAnywhere, Category = "Position Handler")
 	bool changeTurn = false; 
+
+	bool isLookingAround = false; 
 
 	UPROPERTY(EditAnywhere, Category = "Turn Change Speed")
 	float rotationSpeed = 1.0f;
