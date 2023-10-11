@@ -29,12 +29,51 @@ void ASkript_CameraController::Tick(float DeltaTime)
 void ASkript_CameraController::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-    InputComponent->BindAction("ChangeTurn", IE_Pressed,  this, &ASkript_CameraController::OnChangeTurn); // Hier die Korrektur
+    //recieveing Input to change the player who is in Focus
+    InputComponent->BindAction("InputAction_ChangeTurn", IE_Pressed,  this, &ASkript_CameraController::OnChangeTurn); // Hier die Korrektur
+
+    //recieve input for camera rotation
     InputComponent->BindAction("InputAction_RotationRight", IE_Pressed, this, &ASkript_CameraController::rotateRight); 
     InputComponent->BindAction("InputAction_RotationLeft", IE_Pressed, this, &ASkript_CameraController::rotateLeft);
     InputComponent->BindAction("InputAction_RotationRight", IE_Released, this, &ASkript_CameraController::stopPlayerRotating);
     InputComponent->BindAction("InputAction_RotationLeft", IE_Released, this, &ASkript_CameraController::stopPlayerRotating);
+
+    PlayerInputComponent->BindAxis("InputAxis_Forward", this, &ASkript_CameraController::moveCameraForward);
+    PlayerInputComponent->BindAxis("InputAxis_Right", this, &ASkript_CameraController::moveCameraRight);
 }
+
+void ASkript_CameraController::moveCameraForward(float Value)
+{
+    if (FMath::Abs(Value) > 0.0f)
+    {
+        playerInput = true;
+        moveVector = GetActorLocation();
+        FVector DeltaMove = GetActorForwardVector() * Value;
+        moveVector += DeltaMove * 100;
+        SetActorLocation(moveVector);
+    }
+    else
+    {
+        playerInput = false;
+    }
+}
+
+void ASkript_CameraController::moveCameraRight(float Value)
+{
+    if (FMath::Abs(Value) > 0.0f)
+    {
+        playerInput = true;
+        moveVector = GetActorLocation();
+        FVector DeltaMove = GetActorRightVector() * Value;
+        moveVector += DeltaMove * 100;
+        SetActorLocation(moveVector);
+    }
+    else
+    {
+        playerInput = false;
+    }
+}
+
 
 void ASkript_CameraController::changePlayerView(float time)
 {
@@ -45,10 +84,11 @@ void ASkript_CameraController::changePlayerView(float time)
 
     FVector direction = playerPositions[posIndex] - currentLocation;
     FVector dirNormalized = direction.GetSafeNormal();
-
-    currentLocation += dirNormalized * 1000 * time;
-    SetActorLocation(currentLocation);
-
+    if(playerInput==false)
+    {
+        currentLocation += dirNormalized * 1000 * time;
+        SetActorLocation(currentLocation);
+    }
     if (FVector::Distance(currentLocation, playerPositions[posIndex]) < 10.0f)
     {
         if(changeTurn==true)
