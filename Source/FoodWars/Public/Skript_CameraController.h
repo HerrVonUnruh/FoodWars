@@ -27,7 +27,12 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	void changePlayerView(float time);
 
+	void OnChangeTurn();
+
 private:
+	UPROPERTY(EditAnywhere, Category = "Position Handler")
+	bool changeTurn = false; 
+
 	UPROPERTY(EditAnywhere, Category = "Turn Change Speed")
 	float rotationSpeed = 1.0f;
 	UPROPERTY(EditAnywhere, Category = "Turn Change Speed")
