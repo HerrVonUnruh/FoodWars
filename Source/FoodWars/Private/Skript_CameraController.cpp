@@ -30,6 +30,10 @@ void ASkript_CameraController::SetupPlayerInputComponent(UInputComponent* Player
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
     InputComponent->BindAction("ChangeTurn", IE_Pressed,  this, &ASkript_CameraController::OnChangeTurn); // Hier die Korrektur
+    InputComponent->BindAction("InputAction_RotationRight", IE_Pressed, this, &ASkript_CameraController::rotateRight); 
+    InputComponent->BindAction("InputAction_RotationLeft", IE_Pressed, this, &ASkript_CameraController::rotateLeft);
+    InputComponent->BindAction("InputAction_RotationRight", IE_Released, this, &ASkript_CameraController::stopPlayerRotating);
+    InputComponent->BindAction("InputAction_RotationLeft", IE_Released, this, &ASkript_CameraController::stopPlayerRotating);
 }
 
 void ASkript_CameraController::changePlayerView(float time)
@@ -38,6 +42,13 @@ void ASkript_CameraController::changePlayerView(float time)
     FRotator currentRotation = GetActorRotation();
     FRotator newRotation;
     float alpha = 0.1f;
+
+    FVector direction = playerPositions[posIndex] - currentLocation;
+    FVector dirNormalized = direction.GetSafeNormal();
+
+    currentLocation += dirNormalized * 1000 * time;
+    SetActorLocation(currentLocation);
+
     if (FVector::Distance(currentLocation, playerPositions[posIndex]) < 10.0f)
     {
         if(changeTurn==true)
@@ -54,15 +65,42 @@ void ASkript_CameraController::changePlayerView(float time)
             }
         }
     }
-    FVector direction = playerPositions[posIndex] - currentLocation;
-    FVector dirNormalized = direction.GetSafeNormal();
-    newRotation = FMath::Lerp(currentRotation, viewRotations[posIndex], alpha * time);
-    currentLocation += dirNormalized * moveSpeed * time;
-    SetActorLocation(currentLocation);
-    SetActorRotation(newRotation);
+    if(playerRotatesCam==false)
+    {
+        newRotation = FMath::Lerp(currentRotation, viewRotations[posIndex], alpha * time);
+        SetActorRotation(newRotation);
+    } 
+    else if(playerRotatesCam == true && keyVal==1)
+    {
+        FRotator NewRotation = GetActorRotation();
+        NewRotation.Yaw += 10 * time;
+        SetActorRotation(NewRotation);
+    } else if(playerRotatesCam == true && keyVal == 2)
+    {
+        FRotator NewRotation = GetActorRotation();
+        NewRotation.Yaw -= 10*time;
+        SetActorRotation(NewRotation);
+    }    
 }
 void ASkript_CameraController::OnChangeTurn()
 {
     changeTurn = true; 
 }
 
+void ASkript_CameraController::rotateRight()
+{
+    playerRotatesCam = true; 
+    keyVal = 1; 
+}
+
+void ASkript_CameraController::rotateLeft()
+{
+    playerRotatesCam = true;
+    keyVal = 2; 
+}
+
+void ASkript_CameraController::stopPlayerRotating()
+{
+    playerRotatesCam = false; 
+    keyVal = 0; 
+}

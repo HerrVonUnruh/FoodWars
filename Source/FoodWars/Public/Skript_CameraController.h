@@ -28,10 +28,16 @@ public:
 	void changePlayerView(float time);
 
 	void OnChangeTurn();
+	void rotateRight();
+	void rotateLeft();
+	void stopPlayerRotating(); 
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Position Handler")
 	bool changeTurn = false; 
+	UPROPERTY(EditAnywhere, Category = "Position Handler")
+	bool playerRotatesCam = false; 
+	int32 keyVal = 0; 
 
 	UPROPERTY(EditAnywhere, Category = "Turn Change Speed")
 	float rotationSpeed = 1.0f;
