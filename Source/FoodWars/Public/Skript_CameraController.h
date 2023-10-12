@@ -32,6 +32,8 @@ public:
 	void OnChangeTurn();
 	void rotateRight();
 	void rotateLeft();
+
+	void stopRotating(); 
 	void stopPlayerRotating(); 
 
 private:

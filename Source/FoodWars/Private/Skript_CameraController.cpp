@@ -35,9 +35,11 @@ void ASkript_CameraController::SetupPlayerInputComponent(UInputComponent* Player
     //recieve input for camera rotation
     InputComponent->BindAction("InputAction_RotationRight", IE_Pressed, this, &ASkript_CameraController::rotateRight); 
     InputComponent->BindAction("InputAction_RotationLeft", IE_Pressed, this, &ASkript_CameraController::rotateLeft);
-    InputComponent->BindAction("InputAction_RotationRight", IE_Released, this, &ASkript_CameraController::stopPlayerRotating);
-    InputComponent->BindAction("InputAction_RotationLeft", IE_Released, this, &ASkript_CameraController::stopPlayerRotating);
+    InputComponent->BindAction("InputAction_RotationRight", IE_Released, this, &ASkript_CameraController::stopRotating);
+    InputComponent->BindAction("InputAction_RotationLeft", IE_Released, this, &ASkript_CameraController::stopRotating);
 
+    InputComponent->BindAction("IputAction_CamToPlayerCorner", IE_Pressed, this, &ASkript_CameraController::stopPlayerRotating);
+    
     PlayerInputComponent->BindAxis("InputAxis_Forward", this, &ASkript_CameraController::moveCameraForward);
     PlayerInputComponent->BindAxis("InputAxis_Right", this, &ASkript_CameraController::moveCameraRight);
 }
@@ -51,10 +53,7 @@ void ASkript_CameraController::moveCameraForward(float Value)
         FVector DeltaMove = GetActorForwardVector() * Value;
         moveVector += DeltaMove * 100;
         SetActorLocation(moveVector);
-    }
-    else
-    {
-        playerInput = false;
+        keyVal = 3;
     }
 }
 
@@ -67,10 +66,7 @@ void ASkript_CameraController::moveCameraRight(float Value)
         FVector DeltaMove = GetActorRightVector() * Value;
         moveVector += DeltaMove * 100;
         SetActorLocation(moveVector);
-    }
-    else
-    {
-        playerInput = false;
+        keyVal = 3; 
     }
 }
 
@@ -105,7 +101,7 @@ void ASkript_CameraController::changePlayerView(float time)
             }
         }
     }
-    if(playerRotatesCam==false)
+    if(playerRotatesCam==false && keyVal == 0)
     {
         newRotation = FMath::Lerp(currentRotation, viewRotations[posIndex], alpha * time);
         SetActorRotation(newRotation);
@@ -132,6 +128,10 @@ void ASkript_CameraController::rotateRight()
     playerRotatesCam = true; 
     keyVal = 1; 
 }
+void ASkript_CameraController::stopRotating()
+{
+    playerRotatesCam = false;
+}
 
 void ASkript_CameraController::rotateLeft()
 {
@@ -142,5 +142,6 @@ void ASkript_CameraController::rotateLeft()
 void ASkript_CameraController::stopPlayerRotating()
 {
     playerRotatesCam = false; 
+    playerInput = false; 
     keyVal = 0; 
 }
