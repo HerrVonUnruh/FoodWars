@@ -26,18 +26,31 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	void changePlayerView(float time);
+	void moveCameraForward(float Value); 
+	void moveCameraRight(float Value);
 
 	void OnChangeTurn();
+	void rotateRight();
+	void rotateLeft();
+
+	void stopRotating(); 
+	void resetCameraTransform(); 
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Position Handler")
 	bool changeTurn = false; 
+	UPROPERTY(EditAnywhere, Category = "Position Handler")
+	bool playerRotatesCam = false; 
+
+	bool playerInput = false; 
+	int32 keyVal = 0; 
 
 	UPROPERTY(EditAnywhere, Category = "Turn Change Speed")
 	float rotationSpeed = 1.0f;
 	UPROPERTY(EditAnywhere, Category = "Turn Change Speed")
 	float moveSpeed = 1.0f;
 
+	FVector moveVector; 
 	UPROPERTY(EditAnywhere, Category = "Position Handler")
 	TArray<FVector> playerPositions;
 
