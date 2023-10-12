@@ -37,11 +37,15 @@ void ASkript_CameraController::SetupPlayerInputComponent(UInputComponent* Player
     InputComponent->BindAction("InputAction_RotationLeft", IE_Pressed, this, &ASkript_CameraController::rotateLeft);
     InputComponent->BindAction("InputAction_RotationRight", IE_Released, this, &ASkript_CameraController::stopRotating);
     InputComponent->BindAction("InputAction_RotationLeft", IE_Released, this, &ASkript_CameraController::stopRotating);
-
-    InputComponent->BindAction("IputAction_CamToPlayerCorner", IE_Pressed, this, &ASkript_CameraController::stopPlayerRotating);
     
+    //recieve input for camera movement 
     PlayerInputComponent->BindAxis("InputAxis_Forward", this, &ASkript_CameraController::moveCameraForward);
     PlayerInputComponent->BindAxis("InputAxis_Right", this, &ASkript_CameraController::moveCameraRight);
+    
+    //reset camera rotation and position
+    InputComponent->BindAction("IputAction_CamToPlayerCorner", IE_Pressed, this, &ASkript_CameraController::resetCameraTransform);
+    
+
 }
 
 void ASkript_CameraController::moveCameraForward(float Value)
@@ -139,7 +143,7 @@ void ASkript_CameraController::rotateLeft()
     keyVal = 2; 
 }
 
-void ASkript_CameraController::stopPlayerRotating()
+void ASkript_CameraController::resetCameraTransform()
 {
     playerRotatesCam = false; 
     playerInput = false; 

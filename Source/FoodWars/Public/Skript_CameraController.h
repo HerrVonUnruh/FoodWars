@@ -34,7 +34,7 @@ public:
 	void rotateLeft();
 
 	void stopRotating(); 
-	void stopPlayerRotating(); 
+	void resetCameraTransform(); 
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Position Handler")
