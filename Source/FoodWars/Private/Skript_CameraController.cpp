@@ -118,12 +118,12 @@ void ASkript_CameraController::changePlayerView(float time)
     else if(playerRotatesCam == true && keyVal==1)
     {
         FRotator NewRotation = GetActorRotation();
-        NewRotation.Yaw += 10 * time;
+        NewRotation.Yaw += 30 * time;
         SetActorRotation(NewRotation);
     } else if(playerRotatesCam == true && keyVal == 2)
     {
         FRotator NewRotation = GetActorRotation();
-        NewRotation.Yaw -= 10*time;
+        NewRotation.Yaw -= 30*time;
         SetActorRotation(NewRotation);
     }    
 }
@@ -159,7 +159,7 @@ void ASkript_CameraController::moveCameraUp(float Value)
     {
         playerInput = true;
         moveVector = GetActorLocation();
-        zPos += 1 * Value * 50;
+        zPos += 1 * Value * 30;
        
         moveVector.Z = zPos;
         SetActorLocation(moveVector);
