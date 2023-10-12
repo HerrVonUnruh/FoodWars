@@ -36,6 +36,8 @@ public:
 	void stopRotating(); 
 	void resetCameraTransform(); 
 
+	void moveCameraUp(float Value);
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Position Handler")
 	bool changeTurn = false; 
@@ -44,6 +46,9 @@ private:
 
 	bool playerInput = false; 
 	int32 keyVal = 0; 
+
+	bool isOnPoint = false; 
+	float zPos = 1500.0f; 
 
 	UPROPERTY(EditAnywhere, Category = "Turn Change Speed")
 	float rotationSpeed = 1.0f;
@@ -57,4 +62,5 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Rotation Handler")
 	TArray<FRotator> viewRotations;
 	int32 posIndex = 0;
+	int32 rotIndex = 0; 
 };
