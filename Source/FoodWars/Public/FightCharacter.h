@@ -26,8 +26,8 @@ public:
 	void getMovementInput(float Value); 
 	void jumpPlayer();
 	void resetJumpVal(); 
-	void doFalconPunch(); 
-	void resetFalconPunch(); 
+	//void doFalconPunch(); 
+	//void resetFalconPunch(); 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 private:
@@ -39,9 +39,8 @@ private:
 	bool isPunching = false; 
 	UPROPERTY(EditAnywhere)
 	AActor* body;
-
-
-	FVector moveVector; 
+	UPROPERTY(EditAnywhere)
+    FVector moveVector; 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* MeshComponent;
 };

@@ -19,7 +19,6 @@ void AFightCharacter::BeginPlay()
 void AFightCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -29,8 +28,8 @@ void AFightCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	PlayerInputComponent->BindAxis("InputAxis_Right", this, &AFightCharacter::getMovementInput);
 	PlayerInputComponent->BindAction("InputAction_Jump", IE_Pressed, this, &AFightCharacter::jumpPlayer); 
 	PlayerInputComponent->BindAction("InputAction_Jump", IE_Released, this, &AFightCharacter::resetJumpVal);
-	PlayerInputComponent->BindAction("InputAction_Punch", IE_Pressed, this, &AFightCharacter::doFalconPunch);
-	PlayerInputComponent->BindAction("InputAction_Punch", IE_Released, this, &AFightCharacter::resetFalconPunch);
+	//PlayerInputComponent->BindAction("InputAction_Punch", IE_Pressed, this, &AFightCharacter::doFalconPunch);
+	//PlayerInputComponent->BindAction("InputAction_Punch", IE_Released, this, &AFightCharacter::resetFalconPunch);
 }
 
 void AFightCharacter::getMovementInput(float Value)
@@ -50,6 +49,7 @@ void AFightCharacter::jumpPlayer()
 {
 	if(!isJumping)
 	{
+
 		moveVector = body->GetActorLocation();
 		isJumping = true; 
 		FVector jumpVec = body->GetActorUpVector() * jumpForce;
@@ -63,7 +63,7 @@ void AFightCharacter::resetJumpVal()
 	isJumping = false;
 }
 
-void AFightCharacter::doFalconPunch()
+/*void AFightCharacter::doFalconPunch()
 {
 	if (!isPunching)
 	{
@@ -90,4 +90,4 @@ void AFightCharacter::doFalconPunch()
 void AFightCharacter::resetFalconPunch()
 {
 	isPunching = false; 
-}
+}*/
