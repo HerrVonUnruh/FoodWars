@@ -22,18 +22,24 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
 	void getMovementInput(float Value); 
 	void jumpPlayer();
-
+	void resetJumpVal(); 
+	void doFalconPunch(); 
+	void resetFalconPunch(); 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 private:
-	float speed = 10.0F;
+	float speed = 5.0F;
 
-	float jumpForce = 20.0F; 
+	float viewDir; 
+	float jumpForce = 100.0F; 
 	bool isJumping = false; 
+	bool isPunching = false; 
 	UPROPERTY(EditAnywhere)
 	AActor* body;
+
 
 	FVector moveVector; 
 	UPROPERTY(VisibleAnywhere)

@@ -14,9 +14,7 @@ AFightCharacter::AFightCharacter()
 void AFightCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
-
 // Called every frame
 void AFightCharacter::Tick(float DeltaTime)
 {
@@ -30,26 +28,66 @@ void AFightCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAxis("InputAxis_Right", this, &AFightCharacter::getMovementInput);
 	PlayerInputComponent->BindAction("InputAction_Jump", IE_Pressed, this, &AFightCharacter::jumpPlayer); 
+	PlayerInputComponent->BindAction("InputAction_Jump", IE_Released, this, &AFightCharacter::resetJumpVal);
+	PlayerInputComponent->BindAction("InputAction_Punch", IE_Pressed, this, &AFightCharacter::doFalconPunch);
+	PlayerInputComponent->BindAction("InputAction_Punch", IE_Released, this, &AFightCharacter::resetFalconPunch);
 }
 
 void AFightCharacter::getMovementInput(float Value)
 {
-	moveVector = body->GetActorLocation();
-	FVector DeltaMove = body->GetActorRightVector() * Value;
-	moveVector += DeltaMove * speed;
-	body->SetActorLocation(moveVector);
+	if (FMath::Abs(Value) > 0.0f)
+	{
+		viewDir = Value; 
+		moveVector = body->GetActorLocation();
+		FVector DeltaMove = body->GetActorRightVector() * Value;
+		moveVector += DeltaMove * speed;
+		body->SetActorLocation(moveVector);
+	}
 }
 
 
 void AFightCharacter::jumpPlayer()
 {
-	isJumping = false; 
 	if(!isJumping)
 	{
-		isJumping = true; 
 		moveVector = body->GetActorLocation();
+		isJumping = true; 
 		FVector jumpVec = body->GetActorUpVector() * jumpForce;
 		moveVector += jumpVec;
 		body->SetActorLocation(moveVector);
 	}
+}
+
+void AFightCharacter::resetJumpVal()
+{
+	isJumping = false;
+}
+
+void AFightCharacter::doFalconPunch()
+{
+	if (!isPunching)
+	{
+		int i = 0; 
+		isPunching = true; 
+		moveVector = body->GetActorLocation();
+		while(i < 3)
+		{
+			FVector DeltaMove; 
+			if(viewDir > 0)
+			{
+				 DeltaMove = body->GetActorRightVector() * 10;
+			} else 
+			{
+				 DeltaMove = body->GetActorRightVector() * -10;
+			}
+			moveVector += DeltaMove * 10;
+			body->SetActorLocation(moveVector); 
+			i++; 
+		}
+	}
+}
+
+void AFightCharacter::resetFalconPunch()
+{
+	isPunching = false; 
 }
