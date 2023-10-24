@@ -118,12 +118,12 @@ void ASkript_CameraController::changePlayerView(float time)
     else if(playerRotatesCam == true && keyVal==1)
     {
         FRotator NewRotation = GetActorRotation();
-        NewRotation.Yaw += 30 * time;
+        NewRotation.Yaw += rotationSpeed * time;
         SetActorRotation(NewRotation);
     } else if(playerRotatesCam == true && keyVal == 2)
     {
         FRotator NewRotation = GetActorRotation();
-        NewRotation.Yaw -= 30*time;
+        NewRotation.Yaw -= rotationSpeed *time;
         SetActorRotation(NewRotation);
     }    
 }
