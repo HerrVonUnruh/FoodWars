@@ -39,7 +39,22 @@ void AFightCharacter::getMovementInput(float Value)
 		viewDir = Value; 
 		moveVector = body->GetActorLocation();
 		FVector DeltaMove = body->GetActorRightVector() * Value;
-		moveVector += DeltaMove * speed;
+		moveVector += DeltaMove * speed; 
+		FRotator  newRotation;
+		if (Value < 0 && lookRight)
+		{
+			// Der Spieler läuft in die negative Richtung, setze die Rotation auf -180 Grad.
+			lookRight = false; 
+			newRotation = FRotator(0, -180, 0);
+			body->SetActorRotation(newRotation);
+		}
+		else if (Value > 0 && !lookRight)
+		{
+			// Der Spieler läuft in die positive Richtung, setze die Rotation auf 0 Grad.
+			lookRight = true; 
+			newRotation = FRotator(0, 0, 0);
+			body->SetActorRotation(newRotation);
+		}
 		body->SetActorLocation(moveVector);
 	}
 }
@@ -62,6 +77,11 @@ void AFightCharacter::resetJumpVal()
 {
 	isJumping = false;
 }
+int AFightCharacter::getMoveDir(float val)
+{
+	return -1; 
+}
+
 
 /*void AFightCharacter::doFalconPunch()
 {
