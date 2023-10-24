@@ -31,7 +31,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	UFUNCTION(BlueprintCallable, Category = "Damage")
-	int getMoveDir(float val); 
+	int getMoveDir(); 
 private:
 	float speed = 5.0F;
 
@@ -46,4 +46,5 @@ private:
     FVector moveVector; 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* MeshComponent;
+	float dir = 1; 
 };
