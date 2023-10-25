@@ -39,7 +39,16 @@ void AFightCharacter::getMovementInput(float Value)
 		viewDir = Value; 
 		moveVector = body->GetActorLocation();
 		FVector DeltaMove = body->GetActorRightVector() * Value;
-		moveVector += DeltaMove * speed;
+		moveVector += DeltaMove * speed; 
+		FRotator  newRotation;
+		if (Value < 0)
+		{
+			dir = -1; 
+		}
+		else if (Value > 0)
+		{
+			dir = 1; 
+		}
 		body->SetActorLocation(moveVector);
 	}
 }
@@ -62,6 +71,11 @@ void AFightCharacter::resetJumpVal()
 {
 	isJumping = false;
 }
+int AFightCharacter::getMoveDir()
+{
+	return dir; 
+}
+
 
 /*void AFightCharacter::doFalconPunch()
 {
