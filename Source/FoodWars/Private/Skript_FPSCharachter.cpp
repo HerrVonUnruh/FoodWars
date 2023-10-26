@@ -126,7 +126,7 @@ void ASkript_FPSCharachter::shoot(TSubclassOf<AActor> bulletClass, FVector barre
 	if (BulletSphereComponent)
 	{
 		FVector ImpulseDirection = BulletSphereComponent->GetUpVector();
-		float ImpulseStrength = -1000.0f;
+		float ImpulseStrength = -50000.0f;
 		UE_LOG(LogTemp, Warning, TEXT("Impulse Direction: %s"), *ImpulseDirection.ToString());
 		UE_LOG(LogTemp, Warning, TEXT("Impulse Strength: %f"), ImpulseStrength);
 		BulletSphereComponent->AddImpulse(ImpulseDirection * ImpulseStrength);
