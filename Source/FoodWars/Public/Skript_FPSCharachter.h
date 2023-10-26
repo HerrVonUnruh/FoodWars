@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-
+#include "Camera/CameraComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Skript_FPSCharachter.generated.h"
@@ -26,11 +26,18 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	void moveForward(float value); 
-	void moveRight(float value); 
+	void moveRight(float value);
+
+	void rotateRight(float value); 
+	void rotateCameraUp(float value); 
+	UFUNCTION(BlueprintCallable, Category = "Mouse Look")
+	void setCamera(UCameraComponent* camera); 
 
 private:
-	FVector moveVector; 
-	
+	FVector moveVector;
+	UPROPERTY(EditAnywhere)
+	UCameraComponent* camera;
+
 	UPROPERTY(EditAnywhere)
 	float speed = 100; 
 };
