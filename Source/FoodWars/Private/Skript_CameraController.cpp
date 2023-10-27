@@ -153,6 +153,9 @@ void ASkript_CameraController::rotateLeft()
     keyVal = 2; 
 }
 
+/*
+*********************Wir machen Kaffe******Metal*****wir machen alles ********* METAL*********************
+*/
 void ASkript_CameraController::moveCameraUp(float Value)
 {
     if (FMath::Abs(Value) > 0.0f)
@@ -171,4 +174,21 @@ void ASkript_CameraController::resetCameraTransform()
     playerRotatesCam = false; 
     playerInput = false; 
     keyVal = 0; 
+}
+
+void ASkript_CameraController::switchPlayerTurn()
+{
+    changeTurn = true;
+    isOnPoint = false;
+    playerRotatesCam = false;
+    playerInput = false;
+    if(posIndex < 3)
+    {
+        posIndex++; 
+    } else 
+    {
+        posIndex = 0; 
+    }
+    rotIndex = posIndex;
+    keyVal = 0;
 }

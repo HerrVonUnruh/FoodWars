@@ -38,6 +38,9 @@ public:
 
 	void moveCameraUp(float Value);
 
+	UFUNCTION(BlueprintCallable)
+	void switchPlayerTurn(); 
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Position Handler")
 	bool changeTurn = false; 
