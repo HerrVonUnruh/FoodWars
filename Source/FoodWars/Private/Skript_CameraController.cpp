@@ -15,6 +15,7 @@ ASkript_CameraController::ASkript_CameraController()
 void ASkript_CameraController::BeginPlay()
 {
 	Super::BeginPlay();
+    setPositionRef(); 
 	
 }
 
@@ -28,25 +29,23 @@ void ASkript_CameraController::Tick(float DeltaTime)
 // Called to bind functionality to input
 void ASkript_CameraController::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-    //recieveing Input to change the player who is in Focus
-    InputComponent->BindAction("InputAction_ChangeTurn", IE_Pressed,  this, &ASkript_CameraController::OnChangeTurn); // Hier die Korrektur
+    Super::SetupPlayerInputComponent(PlayerInputComponent);
+        //recieveing Input to change the player who is in Focus
+        InputComponent->BindAction("InputAction_ChangeTurn", IE_Pressed, this, &ASkript_CameraController::OnChangeTurn); // Hier die Korrektur
 
-    //recieve input for camera rotation
-    InputComponent->BindAction("InputAction_RotationRight", IE_Pressed, this, &ASkript_CameraController::rotateRight); 
-    InputComponent->BindAction("InputAction_RotationLeft", IE_Pressed, this, &ASkript_CameraController::rotateLeft);
-    InputComponent->BindAction("InputAction_RotationRight", IE_Released, this, &ASkript_CameraController::stopRotating);
-    InputComponent->BindAction("InputAction_RotationLeft", IE_Released, this, &ASkript_CameraController::stopRotating);
-    
-    //recieve input for camera movement 
-    PlayerInputComponent->BindAxis("InputAxis_Forward", this, &ASkript_CameraController::moveCameraForward);
-    PlayerInputComponent->BindAxis("InputAxis_Right", this, &ASkript_CameraController::moveCameraRight);
-    PlayerInputComponent->BindAxis("InputAxis_CameraUp", this, &ASkript_CameraController::moveCameraUp);
-    
-    //reset camera rotation and position
-    InputComponent->BindAction("IputAction_CamToPlayerCorner", IE_Pressed, this, &ASkript_CameraController::resetCameraTransform);
-    
+        //recieve input for camera rotation
+        InputComponent->BindAction("InputAction_RotationRight", IE_Pressed, this, &ASkript_CameraController::rotateRight);
+        InputComponent->BindAction("InputAction_RotationLeft", IE_Pressed, this, &ASkript_CameraController::rotateLeft);
+        InputComponent->BindAction("InputAction_RotationRight", IE_Released, this, &ASkript_CameraController::stopRotating);
+        InputComponent->BindAction("InputAction_RotationLeft", IE_Released, this, &ASkript_CameraController::stopRotating);
 
+        //recieve input for camera movement 
+        PlayerInputComponent->BindAxis("InputAxis_Forward", this, &ASkript_CameraController::moveCameraForward);
+        PlayerInputComponent->BindAxis("InputAxis_Right", this, &ASkript_CameraController::moveCameraRight);
+        PlayerInputComponent->BindAxis("InputAxis_CameraUp", this, &ASkript_CameraController::moveCameraUp);
+
+        //reset camera rotation and position
+        InputComponent->BindAction("IputAction_CamToPlayerCorner", IE_Pressed, this, &ASkript_CameraController::resetCameraTransform);
 }
 
 void ASkript_CameraController::moveCameraForward(float Value)
@@ -93,20 +92,7 @@ void ASkript_CameraController::changePlayerView(float time)
         SetActorLocation(currentLocation);
     }
     if (FVector::Distance(currentLocation, playerPositions[posIndex]) < 10.0f)
-    {
-        if(!isOnPoint)
-        {
-          // if (posIndex < 3)
-          // {
-          //     posIndex++;
-          //     changeTurn = false;
-          // }
-          // else
-          // {
-          //     posIndex = 0;
-          //     changeTurn = false;
-          // }
-        }
+    { 
         isOnPoint = true;
     }
     if(playerRotatesCam==false && keyVal == 0 && currentRotation != viewRotations[rotIndex])
@@ -178,11 +164,12 @@ void ASkript_CameraController::resetCameraTransform()
 
 void ASkript_CameraController::switchPlayerTurn()
 {
+    allowInput = false; 
     changeTurn = true;
     isOnPoint = false;
     playerRotatesCam = false;
     playerInput = false;
-    if(posIndex < 3)
+    if(posIndex < 2)
     {
         posIndex++; 
     } else 
@@ -193,6 +180,14 @@ void ASkript_CameraController::switchPlayerTurn()
     keyVal = 0;
 }
 
+void ASkript_CameraController::setPositionRef()
+{
+    for(int x = 0; x <=(maxPlayer-1); x++)
+    {
+        playerPositions[x] = cameraViewPos[x]->GetActorLocation(); 
+        viewRotations[x] = cameraViewPos[x]->GetActorRotation();
+    }
+}
 int ASkript_CameraController::getPlayerID()
 {
     return posIndex+1; 

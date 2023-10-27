@@ -45,11 +45,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int getPlayerID(); 
 
+	void setPositionRef(); 
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Position Handler")
 	bool changeTurn = false; 
 	UPROPERTY(EditAnywhere, Category = "Position Handler")
 	bool playerRotatesCam = false; 
+
+	UPROPERTY(EditAnywhere, Category = "Position Handler")
+	int maxPlayer = 3; 
 
 	bool playerInput = false; 
 	int32 keyVal = 0; 
@@ -57,17 +62,25 @@ private:
 	bool isOnPoint = false; 
 	float zPos = 1500.0f; 
 
+
 	UPROPERTY(EditAnywhere, Category = "Turn Change Speed")
 	float rotationSpeed = 1.0f;
 	UPROPERTY(EditAnywhere, Category = "Turn Change Speed")
 	float moveSpeed = 1.0f;
 
+	bool allowInput = false; 
 	FVector moveVector; 
+	
 	UPROPERTY(EditAnywhere, Category = "Position Handler")
 	TArray<FVector> playerPositions;
 
 	UPROPERTY(EditAnywhere, Category = "Rotation Handler")
 	TArray<FRotator> viewRotations;
+	
+	UPROPERTY(EditAnywhere, Category = "Position Handler")
+	TArray<AActor*> cameraViewPos; 
 	int32 posIndex = 0;
 	int32 rotIndex = 0; 
+
+
 };
