@@ -38,8 +38,12 @@ public:
 
 	void moveCameraUp(float Value);
 
+	//Blueprint functions
 	UFUNCTION(BlueprintCallable)
 	void switchPlayerTurn(); 
+
+	UFUNCTION(BlueprintCallable)
+	int getPlayerID(); 
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Position Handler")

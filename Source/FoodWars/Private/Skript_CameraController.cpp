@@ -96,16 +96,16 @@ void ASkript_CameraController::changePlayerView(float time)
     {
         if(!isOnPoint)
         {
-            if (posIndex < 3)
-            {
-                posIndex++;
-                changeTurn = false;
-            }
-            else
-            {
-                posIndex = 0;
-                changeTurn = false;
-            }
+          // if (posIndex < 3)
+          // {
+          //     posIndex++;
+          //     changeTurn = false;
+          // }
+          // else
+          // {
+          //     posIndex = 0;
+          //     changeTurn = false;
+          // }
         }
         isOnPoint = true;
     }
@@ -154,7 +154,7 @@ void ASkript_CameraController::rotateLeft()
 }
 
 /*
-*********************Wir machen Kaffe******Metal*****wir machen alles ********* METAL*********************
+*********************Wir machen Kaffe******Metal*****wir machen alles ********* METAL************************Nein spaß, bin scheißen******
 */
 void ASkript_CameraController::moveCameraUp(float Value)
 {
@@ -191,4 +191,9 @@ void ASkript_CameraController::switchPlayerTurn()
     }
     rotIndex = posIndex;
     keyVal = 0;
+}
+
+int ASkript_CameraController::getPlayerID()
+{
+    return posIndex+1; 
 }
