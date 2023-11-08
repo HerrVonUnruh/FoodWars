@@ -37,7 +37,9 @@ public:
 	void moveCameraToNextPosition(FVector camPos, float time); 
 
 	void stopRotating(); 
-	void resetCameraTransform(); 
+	void resetCameraTransform();
+
+	void applyPlayerInputToCameraRotation(float time); 
 
 
 	void getPlayerMovementInput(class UInputComponent* PlayerInputComponent);

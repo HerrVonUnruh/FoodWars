@@ -59,20 +59,25 @@ void ASkript_CameraController::changePlayerView(float time)
     FRotator currentRotation = GetActorRotation();
     moveCameraToNextPosition(currentLocation, time);
     adjustCameraRotationToNewPosition(currentRotation, time);
+    applyPlayerInputToCameraRotation(time); 
 }
 
 
 //handels the Rotation of the Camera 
 void ASkript_CameraController::adjustCameraRotationToNewPosition(FRotator camRot, float time)
 {
-    float alpha = 0.1f;
+    float alpha = 0.25f;
     FRotator newRot;
     if (playerRotatesCam == false && keyVal == 0 && camRot != viewRotations[rotIndex])
     {
         newRot = FMath::Lerp(camRot, viewRotations[rotIndex], alpha * time);
         SetActorRotation(newRot);
     }
-    else if (playerRotatesCam == true && keyVal == 1)
+}
+
+void ASkript_CameraController::applyPlayerInputToCameraRotation(float time)
+{
+    if (playerRotatesCam == true && keyVal == 1)
     {
         FRotator NewRotation = GetActorRotation();
         NewRotation.Yaw += rotationSpeed * time;
@@ -85,7 +90,6 @@ void ASkript_CameraController::adjustCameraRotationToNewPosition(FRotator camRot
         SetActorRotation(NewRotation);
     }
 }
-
 void ASkript_CameraController::rotateRight()
 {
     playerRotatesCam = true;
@@ -108,7 +112,7 @@ void ASkript_CameraController::moveCameraToNextPosition(FVector camPos, float ti
     FVector dirNormalized = direction.GetSafeNormal();
     if (playerInput == false && !isOnPoint)
     {
-        camPos += dirNormalized * 1000 * time;
+        camPos += dirNormalized * 2500 * time;
         zPos = GetActorLocation().Z;
         SetActorLocation(camPos);
     }
