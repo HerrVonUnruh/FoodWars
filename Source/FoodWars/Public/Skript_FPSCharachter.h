@@ -26,6 +26,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
+	void getPlayerMovementInput(class UInputComponent* PlayerInputComponent);
+	void getPlayerCameraInput(class UInputComponent* PlayerInputComponent); 
+
+	UStaticMeshComponent* getButtetSphereComponent();
+	void spawnBullet(UStaticMeshComponent* bullet); 
+
 	//movement
 	void moveForward(float value); 
 	void moveRight(float value);
