@@ -33,8 +33,8 @@ public:
 	void rotateRight();
 	void rotateLeft();
 
-	void doCameraRotation(FRotator camRot, float time); 
-	void doCameraMovement(FVector camPos, float time); 
+	void adjustCameraRotationToNewPosition(FRotator camRot, float time); 
+	void moveCameraToNextPosition(FVector camPos, float time); 
 
 	void stopRotating(); 
 	void resetCameraTransform(); 
@@ -42,7 +42,6 @@ public:
 
 	void getPlayerMovementInput(class UInputComponent* PlayerInputComponent);
 	void getPlayerRotationInput(class UInputComponent* PlayerInputComponent);
-	void getPlayerGameStateInput(class UInputComponent* PlayerInputComponent); 
 	void moveCameraUp(float Value);
 
 	//Blueprint functions

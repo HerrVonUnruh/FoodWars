@@ -57,13 +57,13 @@ void ASkript_CameraController::changePlayerView(float time)
 {
     FVector currentLocation = GetActorLocation();
     FRotator currentRotation = GetActorRotation();
-    doCameraMovement(currentLocation, time);
-    doCameraRotation(currentRotation, time);
+    moveCameraToNextPosition(currentLocation, time);
+    adjustCameraRotationToNewPosition(currentRotation, time);
 }
 
 
 //handels the Rotation of the Camera 
-void ASkript_CameraController::doCameraRotation(FRotator camRot, float time)
+void ASkript_CameraController::adjustCameraRotationToNewPosition(FRotator camRot, float time)
 {
     float alpha = 0.1f;
     FRotator newRot;
@@ -102,7 +102,7 @@ void ASkript_CameraController::rotateLeft()
     keyVal = 2;
 }
 
-void ASkript_CameraController::doCameraMovement(FVector camPos, float time)
+void ASkript_CameraController::moveCameraToNextPosition(FVector camPos, float time)
 {
     FVector direction = playerPositions[posIndex] - camPos;
     FVector dirNormalized = direction.GetSafeNormal();
