@@ -124,16 +124,20 @@ void ASkript_FPSCharachter::setCamera(UCameraComponent* cam)
 
 void ASkript_FPSCharachter::shoot(TSubclassOf<AActor> bulletClass, FVector barrel, bool debugBool, FRotator barrelRotation)
 {
-	bullet = GetWorld()->SpawnActor<AActor>(bulletClass, barrel, barrelRotation);
-	UStaticMeshComponent* BulletSphereComponent = getButtetSphereComponent();
-	
-	if (BulletSphereComponent)
+	if(Ammo > 0)
 	{
-		spawnBullet(BulletSphereComponent);
-	} 
-	else 
-	{
-		UE_LOG(LogTemp, Warning, TEXT("NO SPHERE!!!!! WARNING ACHTUNG!!!!!NO SPHERE %s"));
+		Ammo--; 
+		bullet = GetWorld()->SpawnActor<AActor>(bulletClass, barrel, barrelRotation);
+		UStaticMeshComponent* BulletSphereComponent = getButtetSphereComponent();
+
+		if (BulletSphereComponent)
+		{
+			spawnBullet(BulletSphereComponent);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("NO SPHERE!!!!! WARNING ACHTUNG!!!!!NO SPHERE %s"));
+		}
 	}
 }
 
@@ -182,3 +186,14 @@ float ASkript_FPSCharachter::getHealth()
 {
 	return health;
 }
+
+void ASkript_FPSCharachter::doReload()
+{
+	Ammo = 10; 
+}
+
+float ASkript_FPSCharachter::getAmmo()
+{
+	return Ammo;
+}
+

@@ -54,6 +54,10 @@ public:
 	void takeDamage(); 
 	UFUNCTION(BlueprintCallable, Category = "Player Health")
 	float getHealth(); 
+	UFUNCTION(BlueprintCallable, Category = "Firering")
+	void doReload(); 
+	UFUNCTION(BlueprintCallable, Category = "Firering")
+	float getAmmo(); 
 
 private:
 	FVector moveVector;
@@ -66,6 +70,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float speed = 100; 
+
+	float Ammo = 10;
 	
 	UPROPERTY(EditAnywhere)
 	float jumpForce = 300.0F;
