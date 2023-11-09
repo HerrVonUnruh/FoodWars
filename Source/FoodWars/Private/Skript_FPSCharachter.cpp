@@ -172,3 +172,13 @@ void ASkript_FPSCharachter::moveBullet(float timeSpan,float deltaTime)
 	  timeSpan--; 
   } 
 }
+
+void ASkript_FPSCharachter::takeDamage()
+{
+	health -= 10.0F; 
+}
+
+float ASkript_FPSCharachter::getHealth()
+{
+	return health;
+}

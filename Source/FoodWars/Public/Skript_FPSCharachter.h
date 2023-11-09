@@ -50,6 +50,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Firering")
 	void moveBullet(float timeSpan, float deltaTime);
 
+	UFUNCTION(BlueprintCallable, Category = "Player Health")
+	void takeDamage(); 
+	UFUNCTION(BlueprintCallable, Category = "Player Health")
+	float getHealth(); 
+
 private:
 	FVector moveVector;
 	UPROPERTY(EditAnywhere)
@@ -57,6 +62,7 @@ private:
 
 	AActor* bullet;
 
+	float health = 100.0F; 
 
 	UPROPERTY(EditAnywhere)
 	float speed = 100; 
