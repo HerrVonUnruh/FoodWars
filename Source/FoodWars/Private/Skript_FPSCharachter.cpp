@@ -51,7 +51,7 @@ void ASkript_FPSCharachter::getPlayerCameraInput(class UInputComponent* PlayerIn
 //Player Movement
 void ASkript_FPSCharachter::moveForward(float value)
 {
-	if (FMath::Abs(value) > 0.0f)
+	if (FMath::Abs(value) > 0.0f && canDoStuff)
 	{
 		moveVector = GetActorLocation();
 		FVector deltaMove = GetActorForwardVector() * value;
@@ -62,7 +62,7 @@ void ASkript_FPSCharachter::moveForward(float value)
 
 void ASkript_FPSCharachter::moveRight(float value)
 {
-	if (FMath::Abs(value) > 0.0f)
+	if (FMath::Abs(value) > 0.0f && canDoStuff)
 	{
 		moveVector = GetActorLocation();
 		FVector deltaMove = GetActorRightVector() * value;
@@ -73,7 +73,7 @@ void ASkript_FPSCharachter::moveRight(float value)
 
 void ASkript_FPSCharachter::jump()
 {
-	if (!isJumping)
+	if (!isJumping && canDoStuff)
 	{
 		moveVector = GetActorLocation();
 		isJumping = true;
@@ -91,7 +91,7 @@ void ASkript_FPSCharachter::stopJumping()
 //Mouse Look 
 void ASkript_FPSCharachter::rotateCameraUp(float value)
 {
-	if (FMath::Abs(value) > 0.0f)
+	if (FMath::Abs(value) > 0.0f && canDoStuff)
 	{
 		FRotator cameraRotation = camera->GetRelativeRotation();
 		if (cameraRotation.Pitch < 90 && value > 0 || cameraRotation.Pitch > -90 && value < 0)
@@ -104,7 +104,7 @@ void ASkript_FPSCharachter::rotateCameraUp(float value)
 
 void ASkript_FPSCharachter::rotateRight(float value)
 {
-	if (FMath::Abs(value) > 0.0f)
+	if (FMath::Abs(value) > 0.0f && canDoStuff)
 	{
 		FRotator playerRotation = GetActorRotation();
 		playerRotation.Yaw += value;
@@ -124,7 +124,7 @@ void ASkript_FPSCharachter::setCamera(UCameraComponent* cam)
 
 void ASkript_FPSCharachter::shoot(TSubclassOf<AActor> bulletClass, FVector barrel, bool debugBool, FRotator barrelRotation)
 {
-	if(Ammo > 0)
+	if(Ammo > 0 && canDoStuff)
 	{
 		Ammo--; 
 		bullet = GetWorld()->SpawnActor<AActor>(bulletClass, barrel, barrelRotation);
@@ -197,3 +197,12 @@ float ASkript_FPSCharachter::getAmmo()
 	return Ammo;
 }
 
+void  ASkript_FPSCharachter::setCanDoStuff(bool newVal)
+{
+	canDoStuff = newVal; 
+}
+
+bool ASkript_FPSCharachter::getCanDoStuff()
+{
+	return canDoStuff;
+}

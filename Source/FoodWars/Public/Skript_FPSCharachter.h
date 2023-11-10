@@ -59,6 +59,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Firering")
 	float getAmmo(); 
 
+	UFUNCTION(BlueprintCallable, Category = "Player Controller")
+	void setCanDoStuff(bool newValue);
+	UFUNCTION(BlueprintCallable, Category = "Player Controller")
+	bool getCanDoStuff();
+
 private:
 	FVector moveVector;
 	UPROPERTY(EditAnywhere)
@@ -73,6 +78,8 @@ private:
 
 	float Ammo = 10;
 	
+	bool canDoStuff = true; 
+
 	UPROPERTY(EditAnywhere)
 	float jumpForce = 300.0F;
 	bool isJumping = false; 
