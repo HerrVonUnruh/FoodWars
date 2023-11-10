@@ -26,6 +26,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
+	void getPlayerMovementInput(class UInputComponent* PlayerInputComponent);
+	void getPlayerCameraInput(class UInputComponent* PlayerInputComponent); 
+
+	UStaticMeshComponent* getButtetSphereComponent();
+	void spawnBullet(UStaticMeshComponent* bullet); 
+
 	//movement
 	void moveForward(float value); 
 	void moveRight(float value);
@@ -44,6 +50,20 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Firering")
 	void moveBullet(float timeSpan, float deltaTime);
 
+	UFUNCTION(BlueprintCallable, Category = "Player Health")
+	void takeDamage(); 
+	UFUNCTION(BlueprintCallable, Category = "Player Health")
+	float getHealth(); 
+	UFUNCTION(BlueprintCallable, Category = "Firering")
+	void doReload(); 
+	UFUNCTION(BlueprintCallable, Category = "Firering")
+	float getAmmo(); 
+
+	UFUNCTION(BlueprintCallable, Category = "Player Controller")
+	void setCanDoStuff(bool newValue);
+	UFUNCTION(BlueprintCallable, Category = "Player Controller")
+	bool getCanDoStuff();
+
 private:
 	FVector moveVector;
 	UPROPERTY(EditAnywhere)
@@ -51,10 +71,15 @@ private:
 
 	AActor* bullet;
 
+	float health = 100.0F; 
 
 	UPROPERTY(EditAnywhere)
 	float speed = 100; 
+
+	float Ammo = 10;
 	
+	bool canDoStuff = true; 
+
 	UPROPERTY(EditAnywhere)
 	float jumpForce = 300.0F;
 	bool isJumping = false; 
