@@ -66,7 +66,7 @@ void ASkript_CameraController::changePlayerView(float time)
 //handels the Rotation of the Camera 
 void ASkript_CameraController::adjustCameraRotationToNewPosition(FRotator camRot, float time)
 {
-    float alpha = 0.25f;
+    float alpha = 1.0f;
     FRotator newRot;
     if (playerRotatesCam == false && keyVal == 0 && camRot != viewRotations[rotIndex])
     {
