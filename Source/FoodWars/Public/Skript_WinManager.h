@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Skript_KingKillerTimer.generated.h"
+#include "Skript_WinManager.generated.h"
 
 UCLASS()
-class FOODWARS_API ASkript_KingKillerTimer : public AActor
+class FOODWARS_API ASkript_WinManager : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ASkript_KingKillerTimer();
+	ASkript_WinManager();
 
 protected:
 	// Called when the game starts or when spawned
@@ -22,12 +22,13 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UFUNCTION(BlueprintCallable, Category = "timer")
-	void timer(float deltaTime); 
-	
-	UFUNCTION(BlueprintCallable, Category = "timer")
-	float getTimerValue();
-private:
-	float timeLeft = 20; 
-	TArray<int32> winCounter[5]; 
+
+	void setMaxWin(int value); 
+	void increaseWin(int winNr, int PlayerID);
+	int getMaxWin(); 
+
+private: 
+	UPROPERTY(EditAnywhere)
+	int32 maxWins = 2; 
+
 };
