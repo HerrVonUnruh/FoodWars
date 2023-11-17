@@ -27,7 +27,7 @@ public:
 	void setMaxWin(int value); 
 	
 	UFUNCTION(BlueprintCallable)
-	int increaseWin(int winNr, int PlayerID);
+	int increaseWin(int PlayerID);
 	
 	UFUNCTION(BlueprintCallable)
 	int getMaxWin(); 
@@ -38,7 +38,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void setPlayerCount(int playerCount);
 
-private: 
+public: 
 	UPROPERTY(EditAnywhere)
 	int32 maxWins = 2; 
 	TArray<int> winCounter; 
