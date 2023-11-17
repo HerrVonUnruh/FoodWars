@@ -29,4 +29,5 @@ public:
 	float getTimerValue();
 private:
 	float timeLeft = 20; 
+	TArray<int32> winCounter[5]; 
 };
