@@ -22,13 +22,29 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	
+	UFUNCTION(BlueprintCallable)
 	void setMaxWin(int value); 
-	void increaseWin(int winNr, int PlayerID);
+	
+	UFUNCTION(BlueprintCallable)
+	int increaseWin(int winNr, int PlayerID);
+	
+	UFUNCTION(BlueprintCallable)
 	int getMaxWin(); 
+	
+	UFUNCTION(BlueprintCallable)
+	int getPlayerWin(int playerId); 
+	
+	UFUNCTION(BlueprintCallable)
+	void setPlayerCount(int playerCount);
 
 private: 
 	UPROPERTY(EditAnywhere)
 	int32 maxWins = 2; 
+	TArray<int> winCounter; 
+	UPROPERTY(EditAnywhere)
+	int playerCount = 3; 
+
+
 
 };

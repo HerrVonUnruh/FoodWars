@@ -25,3 +25,28 @@ void ASkript_WinManager::Tick(float DeltaTime)
 
 }
 
+void ASkript_WinManager::setPlayerCount(int count)
+{
+	playerCount = count; 
+	winCounter.Init(0, playerCount); 
+}
+int ASkript_WinManager::getPlayerWin(int playerID)
+{
+	return winCounter[playerID]; 
+}
+int ASkript_WinManager::getMaxWin()
+{
+	return maxWins; 
+}
+
+int ASkript_WinManager::increaseWin(int winCount, int PlayerID)
+{
+	winCount[&PlayerID] = winCount; 
+	return winCount[&PlayerID]; 
+}
+void  ASkript_WinManager::setMaxWin(int value)
+{
+	maxWins = value; 
+}
+
+
