@@ -55,6 +55,9 @@ public:
 
 	void setPositionRef(); 
 
+	UFUNCTION(BlueprintCallable)
+	void setMaxPlayerIndex(int value); 
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Position Handler")
 	bool changeTurn = false; 
@@ -66,6 +69,8 @@ private:
 
 	bool playerInput = false; 
 	int32 keyVal = 0; 
+
+	int maxPlayerIndex = 0; 
 
 	bool isOnPoint = false; 
 	float zPos = 1500.0f; 

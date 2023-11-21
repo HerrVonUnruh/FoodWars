@@ -184,7 +184,7 @@ void ASkript_CameraController::switchPlayerTurn()
 {
 
     OnChangeTurn(); 
-    if(posIndex < 2)
+    if(posIndex < maxPlayer-1)
     {
         posIndex++; 
     } else 
@@ -207,4 +207,9 @@ void ASkript_CameraController::setPositionRef()
 int ASkript_CameraController::getPlayerID()
 {
     return posIndex+1; 
+}
+
+void ASkript_CameraController::setMaxPlayerIndex(int value)
+{
+    maxPlayerIndex = value; 
 }
