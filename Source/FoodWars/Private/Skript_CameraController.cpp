@@ -126,13 +126,38 @@ void ASkript_CameraController::moveCameraForward(float Value)
 {
     if (FMath::Abs(Value) > 0.0f)
     {
-        playerInput = true;
+        /*playerInput = true;
         moveVector = GetActorLocation();
         FVector DeltaMove = GetActorForwardVector() * Value;
         moveVector += DeltaMove * 100;
         moveVector.Z = zPos;
         SetActorLocation(moveVector);
+        keyVal = 3;*/
+        
+        center.Z = zPos;
         keyVal = 3;
+        moveVector.Z = zPos;
+        playerInput = true;
+           FVector CurrentLocation = GetActorLocation();
+
+           // Die gewünschte Bewegungsrichtung (in diesem Beispiel wird der rechte Vektor verwendet)
+           FVector DesiredDirection = GetActorForwardVector();
+
+           // Die gewünschte Verschiebung basierend auf dem Eingabewert
+           FVector DeltaMove = DesiredDirection * Value * moveSpeed;
+
+           // Die neue Position, die erreicht werden soll
+           FVector NewLocation = CurrentLocation + DeltaMove;
+
+           // Die maximale erlaubte Entfernung
+
+
+           // Überprüfen, ob die Bewegung die maximale Entfernung überschreitet
+        if(FVector::Distance(center, NewLocation) < MaxDistance)
+        {
+            // Wenn die Bedingung erfüllt ist, führen Sie die Bewegung aus
+            SetActorLocation(NewLocation);
+        }
     }
 }
 
@@ -140,12 +165,39 @@ void ASkript_CameraController::moveCameraRight(float Value)
 {
     if (FMath::Abs(Value) > 0.0f)
     {
-        playerInput = true;
+        /*playerInput = true;
         moveVector = GetActorLocation();
         FVector DeltaMove = GetActorRightVector() * Value;
         moveVector += DeltaMove * 100;
         SetActorLocation(moveVector);
+        keyVal = 3;*/
         keyVal = 3;
+        moveVector.Z = zPos;
+        playerInput = true;
+        // Die aktuelle Position des Actors
+        center.Z = zPos;
+
+           FVector CurrentLocation = GetActorLocation();
+
+           // Die gewünschte Bewegungsrichtung (in diesem Beispiel wird der rechte Vektor verwendet)
+           FVector DesiredDirection = GetActorRightVector();
+
+           // Die gewünschte Verschiebung basierend auf dem Eingabewert
+           FVector DeltaMove = DesiredDirection * Value * moveSpeed;
+
+           // Die neue Position, die erreicht werden soll
+           FVector NewLocation = CurrentLocation + DeltaMove;
+
+           // Die maximale erlaubte Entfernung
+
+
+           // Überprüfen, ob die Bewegung die maximale Entfernung überschreitet
+        if(FVector::Distance(center, NewLocation) < MaxDistance)
+        {
+            // Wenn die Bedingung erfüllt ist, führen Sie die Bewegung aus
+            SetActorLocation(NewLocation);
+        }
+
     }
 }
 
@@ -155,10 +207,17 @@ void ASkript_CameraController::moveCameraUp(float Value)
     {
         playerInput = true;
         moveVector = GetActorLocation();
+        float oldZPos= zPos;
         zPos += 1 * Value * 30;
        
         moveVector.Z = zPos;
-        SetActorLocation(moveVector);
+        if(zPos < MaxDistance && zPos > 100)
+        {
+            SetActorLocation(moveVector);
+        } else
+        {
+            zPos = oldZPos;
+        }
         keyVal = 4;
     }
 }
@@ -212,4 +271,11 @@ int ASkript_CameraController::getPlayerID()
 void ASkript_CameraController::setMaxPlayerIndex(int value)
 {
     maxPlayerIndex = value; 
+}
+
+void ASkript_CameraController::resetPlayerPosition()
+{
+    isOnPoint = false;
+    playerRotatesCam = false;
+    playerInput = false;
 }

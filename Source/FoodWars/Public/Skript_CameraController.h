@@ -57,6 +57,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void setMaxPlayerIndex(int value); 
+    
+    UFUNCTION(BlueprintCallable)
+    void resetPlayerPosition();
+    
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Position Handler")
@@ -74,6 +78,8 @@ private:
 
 	bool isOnPoint = false; 
 	float zPos = 1500.0f; 
+    UPROPERTY(EditAnywhere, Category = "Position Limitation")
+    float MaxDistance = 5000.0f;
 
 
 	UPROPERTY(EditAnywhere, Category = "Turn Change Speed")
@@ -83,6 +89,9 @@ private:
 
 	bool allowInput = false; 
 	FVector moveVector; 
+    
+    UPROPERTY(EditAnywhere, Category = "Move Limitation")
+    FVector center; 
 	
 	UPROPERTY(EditAnywhere, Category = "Position Handler")
 	TArray<FVector> playerPositions;
