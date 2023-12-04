@@ -23,7 +23,8 @@ void ASkript_CameraController::BeginPlay()
 void ASkript_CameraController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	changePlayerView(DeltaTime); 
+    deltaTime = DeltaTime;
+	changePlayerView(DeltaTime);
  }
 
 // Called to bind functionality to input
@@ -144,7 +145,7 @@ void ASkript_CameraController::moveCameraForward(float Value)
            FVector DesiredDirection = GetActorForwardVector();
 
            // Die gewünschte Verschiebung basierend auf dem Eingabewert
-           FVector DeltaMove = DesiredDirection * Value * moveSpeed;
+           FVector DeltaMove = DesiredDirection * Value * moveSpeed*deltaTime;
 
            // Die neue Position, die erreicht werden soll
            FVector NewLocation = CurrentLocation + DeltaMove;
@@ -183,7 +184,7 @@ void ASkript_CameraController::moveCameraRight(float Value)
            FVector DesiredDirection = GetActorRightVector();
 
            // Die gewünschte Verschiebung basierend auf dem Eingabewert
-           FVector DeltaMove = DesiredDirection * Value * moveSpeed;
+           FVector DeltaMove = DesiredDirection * Value * moveSpeed*deltaTime;
 
            // Die neue Position, die erreicht werden soll
            FVector NewLocation = CurrentLocation + DeltaMove;
