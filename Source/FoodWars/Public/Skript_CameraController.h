@@ -103,6 +103,8 @@ private:
 	TArray<AActor*> cameraViewPos; 
 	int32 posIndex = 0;
 	int32 rotIndex = 0; 
+    
+    float deltaTime; 
 
 
 };
