@@ -41,8 +41,8 @@ int ASkript_WinManager::getMaxWin()
 
 int ASkript_WinManager::increaseWin(int PlayerID)
 {
-	winCounter[PlayerID]++; 
-	return winCounter[PlayerID]; 
+	winCounter[PlayerID]+=1;
+	return winCounter[PlayerID];
 }
 void  ASkript_WinManager::setMaxWin(int value)
 {
