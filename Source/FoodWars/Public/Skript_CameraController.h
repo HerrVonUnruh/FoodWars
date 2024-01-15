@@ -79,13 +79,19 @@ private:
 	bool isOnPoint = false; 
 	float zPos = 1500.0f; 
     UPROPERTY(EditAnywhere, Category = "Position Limitation")
-    float MaxDistance = 5000.0f;
+    float MaxDistanceUp = 5000.0f;
+	UPROPERTY(EditAnywhere, Category = "Position Limitation")
+	float MaxDistance = 5000.0f;
 	UPROPERTY(EditAnywhere, Category = "Camera Movement Up")
 	float MoveSpeedUp = 1000.0F; 
 	UPROPERTY(EditAnywhere, Category = "Turn Change Speed")
 	float rotationSpeed = 1.0f;
 	UPROPERTY(EditAnywhere, Category = "Turn Change Speed")
 	float moveSpeed = 1.0f;
+	UPROPERTY(EditAnywhere, Category = "Camera Angle Adjustment")
+	float cameraAngleAdjustment = 5.0f;
+
+	bool reachedOneMaxHeight = false; 
 
 	bool allowInput = false; 
 	FVector moveVector; 
