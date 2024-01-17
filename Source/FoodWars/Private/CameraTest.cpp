@@ -56,7 +56,7 @@ void ACameraTest::MoveCamera(float Value)
             float currentDistance = FVector::Distance(Center, GetActorLocation());
             float percentage = currentDistance / maxDistance;
 
-            float newRadius = moveCycleRadius / percentage;
+            float newRadius = moveCycleRadius * percentage;
             NewCameraPosition = Center + FVector(newRadius * FMath::Cos(CurrentRotationAngle), newRadius * FMath::Sin(CurrentRotationAngle), GetActorLocation().Z);
         }
 
