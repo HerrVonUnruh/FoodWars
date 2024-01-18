@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Camera/CameraComponent.h"
 #include "Skript_CameraController.generated.h"
 
 UCLASS()
@@ -28,7 +29,7 @@ public:
 	
 	void moveCameraHorizontal(float Value);
 	void moveCameraUp(float Value);
-
+	void lookAt(); 
 	//Blueprint functions
 	UFUNCTION(BlueprintCallable)
 	void switchPlayerTurn(); 
@@ -43,6 +44,9 @@ public:
     
     UFUNCTION(BlueprintCallable)
     void resetPlayerPosition();
+
+	UFUNCTION(BlueprintCallable)
+    void setCamera(UCameraComponent* cam);
     
 
 private:
@@ -57,8 +61,11 @@ private:
 	bool playerInput = false; 
 	int32 keyVal = 0; 
 
-	int maxPlayerIndex = 0; 
+	UPROPERTY(EditAnywhere, Category = "Camera")
+    UCameraComponent* MyCamera;
 
+	int maxPlayerIndex = 0; 
+	bool allowPlayerInput = true; 
 	bool isOnPoint = false; 
 	UPROPERTY(EditAnywhere, Category = "Turn Change Speed")
 	float rotationSpeed = 1.0f;

@@ -14,6 +14,7 @@ void ASkript_CameraController::BeginPlay()
     Super::BeginPlay();
     SetActorLocation(center); 
     setPositionRef(); 
+    resetPlayerPosition(); 
 }
 
 // Called every frame
@@ -46,6 +47,14 @@ void ASkript_CameraController::moveCameraHorizontal(float Value)
     }
 }
 
+void ASkript_CameraController::lookAt()
+{
+	FRotator targetRotation = (center - GetActorLocation()).Rotation();
+	FRotator NewRot = FMath::RInterpTo(GetActorRotation(), targetRotation, deltaTime, 1.3);
+	SetActorRotation(NewRot);
+}
+
+
 void ASkript_CameraController::moveCameraUp(float Value)
 {
     if (Value != 0)
@@ -71,12 +80,26 @@ void ASkript_CameraController::switchPlayerTurn()
     {
         rotIndex = 0;
     }
-    if(playerInput == false)
-    {
-        FRotator targetRot = viewRotations[rotIndex]; 
-        FRotator applyRotation = FMath::RInterpTo(GetActorRotation(), targetRot, deltaTime, 1); 
-        SetActorRotation(applyRotation); 
-    }
+        FVector camPos = MyCamera->GetComponentLocation(); 
+        FVector targetPos = cameraViewPos[rotIndex]->GetActorLocation(); 
+        if(camPos != targetPos)
+        {
+            allowPlayerInput = false; 
+            FVector dir = targetPos - camPos; 
+            dir.Normalize(); 
+            camPos += dir * rotationSpeed * deltaTime; 
+            FVector newPos = FMath::VInterpTo(MyCamera->GetComponentLocation(), camPos,deltaTime, 1.3F); 
+            MyCamera->SetWorldLocation(newPos); 
+
+        } else 
+        {
+            allowPlayerInput = true; 
+        }
+}
+
+void ASkript_CameraController::setCamera(UCameraComponent* cam)
+{
+    MyCamera = cam; 
 }
 
 void ASkript_CameraController::setPositionRef()
@@ -98,10 +121,18 @@ void ASkript_CameraController::setMaxPlayerIndex(int value)
 
 void ASkript_CameraController::resetPlayerPosition()
 {
-    if(playerInput == false)
+    if (playerInput == false)
     {
-        FRotator targetRot = viewRotations[rotIndex]; 
-        FRotator applyRotation = FMath::RInterpTo(GetActorRotation(), targetRot, deltaTime, 1); 
-        SetActorRotation(applyRotation); 
+        FVector camPos = MyCamera->GetComponentLocation(); 
+        FVector targetPos = cameraViewPos[rotIndex]->GetActorLocation(); 
+        if(camPos != targetPos)
+        {
+            FVector dir = targetPos - camPos; 
+            dir.Normalize(); 
+            camPos += dir * rotationSpeed * deltaTime; 
+            FVector newPos = FMath::VInterpTo(MyCamera->GetComponentLocation(), camPos,deltaTime, 1.3F); 
+            MyCamera->SetWorldLocation(newPos); 
+
+        } 
     }
 }
