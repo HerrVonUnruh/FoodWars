@@ -25,25 +25,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	void changePlayerView(float time);
-	void moveCameraForward(float Value); 
-	void moveCameraRight(float Value);
-
-	void OnChangeTurn();
-	void rotateRight();
-	void rotateLeft();
-
-	void adjustCameraRotationToNewPosition(FRotator camRot, float time); 
-	void moveCameraToNextPosition(FVector camPos, float time); 
-
-	void stopRotating(); 
-	void resetCameraTransform();
-
-	void applyPlayerInputToCameraRotation(float time); 
-
-
-	void getPlayerMovementInput(class UInputComponent* PlayerInputComponent);
-	void getPlayerRotationInput(class UInputComponent* PlayerInputComponent);
+	
+	void moveCameraHorizontal(float Value);
 	void moveCameraUp(float Value);
 
 	//Blueprint functions
@@ -77,26 +60,12 @@ private:
 	int maxPlayerIndex = 0; 
 
 	bool isOnPoint = false; 
-	float zPos = 1500.0f; 
-    UPROPERTY(EditAnywhere, Category = "Position Limitation")
-    float MaxDistanceUp = 5000.0f;
-	UPROPERTY(EditAnywhere, Category = "Position Limitation")
-	float MaxDistance = 5000.0f;
-	UPROPERTY(EditAnywhere, Category = "Camera Movement Up")
-	float MoveSpeedUp = 1000.0F; 
 	UPROPERTY(EditAnywhere, Category = "Turn Change Speed")
 	float rotationSpeed = 1.0f;
-	UPROPERTY(EditAnywhere, Category = "Turn Change Speed")
-	float moveSpeed = 1.0f;
-	UPROPERTY(EditAnywhere, Category = "Camera Angle Adjustment")
-	float cameraAngleAdjustment = 5.0f;
-
-	bool reachedOneMaxHeight = false; 
-
+	
 	bool allowInput = false; 
-	FVector moveVector; 
-    
-    UPROPERTY(EditAnywhere, Category = "Move Limitation")
+	
+	UPROPERTY(EditAnywhere, Category = "Move Limitation")
     FVector center; 
 	
 	UPROPERTY(EditAnywhere, Category = "Position Handler")
@@ -107,10 +76,7 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category = "Position Handler")
 	TArray<AActor*> cameraViewPos; 
-	int32 posIndex = 0;
 	int32 rotIndex = 0; 
     
     float deltaTime; 
-
-
 };
