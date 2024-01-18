@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "Skript_CameraController.h"
+#include "Camera/CameraComponent.h"
 
 // Sets default values
 ASkript_CameraController::ASkript_CameraController()
@@ -14,14 +15,14 @@ void ASkript_CameraController::BeginPlay()
     Super::BeginPlay();
     SetActorLocation(center); 
     setPositionRef(); 
-    resetPlayerPosition(); 
 }
 
 // Called every frame
 void ASkript_CameraController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-    deltaTime = DeltaTime;
+    deltaTime = DeltaTime; 
+    lookAt(); 
  }
 
 // Called to bind functionality to input
@@ -81,13 +82,13 @@ void ASkript_CameraController::switchPlayerTurn()
         rotIndex = 0;
     }
         FVector camPos = MyCamera->GetComponentLocation(); 
-        FVector targetPos = cameraViewPos[rotIndex]->GetActorLocation(); 
+        FVector targetPos = playerPositions[rotIndex]; 
         if(camPos != targetPos)
         {
             allowPlayerInput = false; 
             FVector dir = targetPos - camPos; 
             dir.Normalize(); 
-            camPos += dir * rotationSpeed * deltaTime; 
+            camPos += dir * rotationSpeed; 
             FVector newPos = FMath::VInterpTo(MyCamera->GetComponentLocation(), camPos,deltaTime, 1.3F); 
             MyCamera->SetWorldLocation(newPos); 
 
@@ -104,10 +105,6 @@ void ASkript_CameraController::setCamera(UCameraComponent* cam)
 
 void ASkript_CameraController::setPositionRef()
 {
-    for(int x = 0; x <=(maxPlayer-1); x++)
-    {
-        viewRotations[x] = cameraViewPos[x]->GetActorRotation();
-    }
 }
 int ASkript_CameraController::getPlayerID()
 {
@@ -121,18 +118,21 @@ void ASkript_CameraController::setMaxPlayerIndex(int value)
 
 void ASkript_CameraController::resetPlayerPosition()
 {
-    if (playerInput == false)
-    {
-        FVector camPos = MyCamera->GetComponentLocation(); 
-        FVector targetPos = cameraViewPos[rotIndex]->GetActorLocation(); 
-        if(camPos != targetPos)
-        {
-            FVector dir = targetPos - camPos; 
-            dir.Normalize(); 
-            camPos += dir * rotationSpeed * deltaTime; 
-            FVector newPos = FMath::VInterpTo(MyCamera->GetComponentLocation(), camPos,deltaTime, 1.3F); 
-            MyCamera->SetWorldLocation(newPos); 
-
-        } 
-    }
+    isOnPoint = false; 
+ while(isOnPoint == false && playerInput == false)
+ {
+     FVector camPos = MyCamera->GetComponentLocation();
+     FVector targetPos = playerPositions[rotIndex];
+     if(FVector::Distance(camPos, targetPos) > 10)
+     {           
+         FVector dir = targetPos - camPos; 
+         dir.Normalize(); 
+         camPos += dir * rotationSpeed;
+         FVector newPos = FMath::VInterpTo(MyCamera->GetComponentLocation(), camPos, deltaTime, 0.1F);
+         MyCamera->SetWorldLocation(newPos);
+     } else 
+     {
+         isOnPoint = true; 
+     }
+ }
 }

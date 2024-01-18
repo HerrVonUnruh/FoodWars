@@ -68,13 +68,11 @@ private:
 	bool allowPlayerInput = true; 
 	bool isOnPoint = false; 
 	UPROPERTY(EditAnywhere, Category = "Turn Change Speed")
-	float rotationSpeed = 1.0f;
+	float rotationSpeed = 100.0f;
 	
 	bool allowInput = false; 
-	
 	UPROPERTY(EditAnywhere, Category = "Move Limitation")
-    FVector center; 
-	
+    FVector center = FVector(-248, -2, 42); 
 	UPROPERTY(EditAnywhere, Category = "Position Handler")
 	TArray<FVector> playerPositions;
 
