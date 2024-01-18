@@ -14,7 +14,7 @@ ASkript_CameraController::ASkript_CameraController()
 // Called when the game starts or when spawned
 void ASkript_CameraController::BeginPlay()
 {
-	Super::BeginPlay();
+    Super::BeginPlay();
     setPositionRef(); 
 	
 }
@@ -206,18 +206,28 @@ void ASkript_CameraController::moveCameraUp(float Value)
 {
     if (FMath::Abs(Value) > 0.0f)
     {
+        float rotDir = Value; 
         playerInput = true;
         moveVector = GetActorLocation();
         float oldZPos= zPos;
-        zPos += 1 * Value * MoveSpeedUp;
-       
+        zPos -= 1 * Value * MoveSpeedUp;
+        FRotator cameraAdjustment = GetActorRotation();
+        cameraAdjustment.Pitch += cameraAngleAdjustment * rotDir;
         moveVector.Z = zPos;
-        if(zPos < MaxDistance && zPos > 100)
+        if(zPos < MaxDistanceUp && zPos > 100)
         {
+            FMath::ClampAngle(cameraAdjustment.Pitch, -90, 0);
+            reachedOneMaxHeight = false; 
             SetActorLocation(moveVector);
+            SetActorRotation(cameraAdjustment); 
         } else
         {
             zPos = oldZPos;
+            if(reachedOneMaxHeight == false)
+            {
+                //rotDir *= -1;
+                reachedOneMaxHeight = true; 
+            }
         }
         keyVal = 4;
     }
