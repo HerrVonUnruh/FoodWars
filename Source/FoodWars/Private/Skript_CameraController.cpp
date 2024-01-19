@@ -113,7 +113,7 @@ void ASkript_CameraController::moveCameraToNextPosition(FVector camPos, float ti
     FVector dirNormalized = direction.GetSafeNormal();
     if (playerInput == false && !isOnPoint)
     {
-        camPos += dirNormalized * 2500 * time;
+        camPos += dirNormalized * moveSpeed * time;
         zPos = GetActorLocation().Z;
         SetActorLocation(camPos);
     }
@@ -209,7 +209,7 @@ void ASkript_CameraController::moveCameraUp(float Value)
         playerInput = true;
         moveVector = GetActorLocation();
         float oldZPos= zPos;
-        zPos += 1 * Value * 30;
+        zPos += 1 * Value * MoveSpeedUp;
        
         moveVector.Z = zPos;
         if(zPos < MaxDistance && zPos > 100)
