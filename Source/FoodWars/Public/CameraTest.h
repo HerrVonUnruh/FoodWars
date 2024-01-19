@@ -29,29 +29,11 @@ public:
 
 	void MoveCamera(float Value);
 	void MoveCameraUp(float Value);
-	void RotateCamToCenter(float deltaTime); 
-
-	//helper funktionen 
-	float GetDeltaTime(); //returned die pro frame vergangene Zeit 
 
 private: 
 	UPROPERTY(EditAnywhere, Category = "Camera Movement")
 	float rotationSpeed = 150.0F; 
-	UPROPERTY(EditAnywhere, Category = "Camera Movement")
-	float moveSpeed = 150.0F;
 	UPROPERTY(EditAnywhere, Category = "CameraMovement")
-	FVector Center; 
-	UPROPERTY(EditAnywhere, Category = "CameraMovemnet")
-	float moveCycleRadius = 1000; 
-	UPROPERTY(EditAnywhere, Category = "CameraMovemnet")
-	FVector lowestPoint = FVector(0,0,1000); 
-	UPROPERTY(EditAnywhere, Category = "CameraMovemnet")
-	FVector HighestPoint = FVector(0, 0, 3000);
-
-	float CurrentRotationAngle = 0; 
-	FVector startPos = GetActorLocation(); 
+	FVector Center;  
 	float deltaTime = 0; 
-
-	bool isMovedUp = false; 
-	float maxDistance = 0; 
 };

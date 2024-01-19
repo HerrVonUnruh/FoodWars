@@ -16,7 +16,7 @@ ACameraTest::ACameraTest()
 void ACameraTest::BeginPlay()
 {
 	Super::BeginPlay();
-	
+    SetActorLocation(Center); 
 }
 
 // Called every frame
@@ -24,7 +24,6 @@ void ACameraTest::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	deltaTime = DeltaTime;
-	RotateCamToCenter(DeltaTime); 
 }
 
 // Called to bind functionality to input
@@ -37,85 +36,25 @@ void ACameraTest::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 void ACameraTest::MoveCamera(float Value)
 {
-    if (FMath::Abs(Value) > 0)
+    if (Value != 0)
     {
-        float RotationSpeedScaled = rotationSpeed * deltaTime;
-        CurrentRotationAngle += RotationSpeedScaled * Value;
-
-        FVector NewCameraPosition;
-
-        if (!isMovedUp)
-        {
-            // Bewegung auf der normalen Kreisbahn
-            NewCameraPosition = Center + FVector(moveCycleRadius * FMath::Cos(CurrentRotationAngle), moveCycleRadius * FMath::Sin(CurrentRotationAngle), GetActorLocation().Z);
-            maxDistance = FVector::Distance(Center, NewCameraPosition); // Speichern Sie die maximale Distanz
-        }
-        else
-        {
-            // Bewegung nach oben, Radius basierend auf prozentualem Anteil der maximalen Distanz ändern
-            float currentDistance = FVector::Distance(Center, GetActorLocation());
-            float percentage = currentDistance / maxDistance;
-
-            float newRadius = moveCycleRadius * percentage;
-            NewCameraPosition = Center + FVector(newRadius * FMath::Cos(CurrentRotationAngle), newRadius * FMath::Sin(CurrentRotationAngle), GetActorLocation().Z);
-        }
-
-        SetActorLocation(NewCameraPosition);
-        lowestPoint.X = NewCameraPosition.X;
-        lowestPoint.Y = NewCameraPosition.Y;
+        FRotator playerRot = GetActorRotation();
+        playerRot.Yaw += rotationSpeed * Value * deltaTime * -1;
+        FRotator newRot = FMath::RInterpTo(GetActorRotation(), playerRot, deltaTime, 1.3);
+        SetActorRotation(newRot);
     }
 }
-
-
 
 void ACameraTest::MoveCameraUp(float Value)
 {
     if (Value != 0)
     {
-        float distance;
-        FVector dir;
-        FVector targetPoint;
+        FRotator playerRot = GetActorRotation();
+        playerRot.Pitch += rotationSpeed * Value * deltaTime;
+        playerRot.Pitch = FMath::ClampAngle(playerRot.Pitch, -45, 0);  // Hier den Clamp-Wert anwenden
+        FRotator newRot = FMath::RInterpTo(GetActorRotation(), playerRot, deltaTime, 1.3);
 
-        if (Value > 0)
-        {
-            isMovedUp = true; 
-            distance = FVector::Distance(HighestPoint, GetActorLocation());
-            dir = HighestPoint - GetActorLocation();
-            targetPoint = HighestPoint;
-        }
-        else
-        {
-            distance = FVector::Distance(lowestPoint, GetActorLocation());
-            dir = lowestPoint - GetActorLocation();
-            targetPoint = lowestPoint;
-        }
-
-        dir.Normalize();
-        FVector DeltaMove = dir * deltaTime * moveSpeed * FMath::Abs(Value);
-        if (distance > DeltaMove.Size())
-        {
-            SetActorLocation(GetActorLocation() + DeltaMove);
-        }
-        else
-        {
-            SetActorLocation(targetPoint);
-            if(Value < 0)
-            {
-                isMovedUp = false; 
-            }
-        }
+        SetActorRotation(newRot);
     }
-}
 
-
-void::ACameraTest::RotateCamToCenter(float DeltaTime)
-{
-	FRotator targetRotation = (Center - GetActorLocation()).Rotation();
-	FRotator NewRot = FMath::RInterpTo(GetActorRotation(), targetRotation, DeltaTime, 1.3);
-	SetActorRotation(NewRot);
-}
-
-float::ACameraTest::GetDeltaTime()
-{
-	return deltaTime; 
 }
