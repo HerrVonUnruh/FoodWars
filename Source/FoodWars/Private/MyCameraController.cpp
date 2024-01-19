@@ -90,7 +90,7 @@ void AMyCameraController::moveCameraUp(float Value)
         playerInput = true;
         FRotator playerRot = GetActorRotation();
         playerRot.Pitch += rotationSpeed * Value * deltaTime;
-        playerRot.Pitch = FMath::ClampAngle(playerRot.Pitch, -45, 0);
+        playerRot.Pitch = FMath::ClampAngle(playerRot.Pitch, -55, -10);
         FRotator newRot = FMath::RInterpTo(GetActorRotation(), playerRot, deltaTime, 1.3);
         SetActorRotation(newRot);
     }
