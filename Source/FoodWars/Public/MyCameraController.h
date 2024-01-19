@@ -46,16 +46,10 @@ public:
     UFUNCTION(BlueprintCallable)
     void setCamera(UCameraComponent* cam);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	class UCameraComponent* MyCamera;
     void camAutoMovement(); 
 
 private:
-    UPROPERTY(EditAnywhere, Category = "Position Handler")
-    bool changeTurn = false; 
-    UPROPERTY(EditAnywhere, Category = "Position Handler")
-    bool playerRotatesCam = false; 
-
     UPROPERTY(EditAnywhere, Category = "Position Handler")
     int maxPlayer = 3; 
 
@@ -71,9 +65,8 @@ private:
     bool switchTurn = false; 
     bool moveCameraToPos = true; 
     
-    bool allowInput = false; 
     
-    UPROPERTY(EditAnywhere, Category = "Move Limitation")
+    UPROPERTY(EditAnywhere, Category = "Rotation Handler")
     FVector center = FVector(0,0,0); 
     
     UPROPERTY(EditAnywhere, Category = "Position Handler")
