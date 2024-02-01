@@ -23,7 +23,7 @@ void ACameraTest::BeginPlay()
 void ACameraTest::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	deltaTime = DeltaTime;
+    deltaTime = DeltaTime; 
 }
 
 // Called to bind functionality to input
