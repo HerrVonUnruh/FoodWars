@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Camera/CameraComponent.h"
+#include "AfkDetecter.h"
 #include "MyCameraController.generated.h"
 
 UCLASS()
@@ -78,6 +79,6 @@ private:
     UPROPERTY(EditAnywhere, Category = "Position Handler")
     TArray<AActor*> cameraViewPos; 
     int32 rotIndex = 0; 
-    
+    AAfkDetecter*  afkDetection= nullptr; 
     float deltaTime; 
 };
