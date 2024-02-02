@@ -69,7 +69,7 @@ void AMyCameraController::camAutoMovement()
 {
     FVector camPos = MyCamera->GetComponentLocation();
     FVector targetPos = cameraViewPos[rotIndex]->GetActorLocation();
-    if (FVector::Distance(camPos,targetPos) > 10)
+    if (FVector::Distance(camPos,targetPos) > 0.1F)
     {
         FVector dir = targetPos - camPos;
         dir.Normalize();
