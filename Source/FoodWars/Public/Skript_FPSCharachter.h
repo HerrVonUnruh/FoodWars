@@ -58,6 +58,7 @@ public:
 	void doReload(); 
 	UFUNCTION(BlueprintCallable, Category = "Firering")
 	float getAmmo(); 
+	
 
 	UFUNCTION(BlueprintCallable, Category = "Player Controller")
 	void setCanDoStuff(bool newValue);
