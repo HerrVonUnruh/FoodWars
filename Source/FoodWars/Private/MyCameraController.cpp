@@ -1,12 +1,11 @@
 #include "MyCameraController.h"
-
 // Sets default values
 AMyCameraController::AMyCameraController()
 {
     // Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
+ afkDetection = CreateDefaultSubobject<AAfkDetecter>(TEXT("AfkDetector"));
 }
-
 // Called when the game starts or when spawned
 void AMyCameraController::BeginPlay()
 {
@@ -23,6 +22,7 @@ void AMyCameraController::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
     deltaTime = DeltaTime;
+    afkDetection->IncreaseAFkTimer(DeltaTime); 
     if(switchTurn || moveCameraToPos)
     {
         camAutoMovement(); 
@@ -43,6 +43,7 @@ void AMyCameraController::moveCameraHorizontal(float Value)
     if (Value != 0)
     {
         playerInput = true;
+        afkDetection->setRevievedInput(playerInput); 
         FRotator playerRot = GetActorRotation();
         playerRot.Yaw += rotationSpeed * Value * deltaTime * -1;
         FRotator newRot = FMath::RInterpTo(GetActorRotation(), playerRot, deltaTime, 1.3);
@@ -51,6 +52,7 @@ void AMyCameraController::moveCameraHorizontal(float Value)
     else
     {
         playerInput = false;
+        afkDetection->setRevievedInput(playerInput); 
     }
 }
 
@@ -69,7 +71,7 @@ void AMyCameraController::camAutoMovement()
 {
     FVector camPos = MyCamera->GetComponentLocation();
     FVector targetPos = cameraViewPos[rotIndex]->GetActorLocation();
-    if (FVector::Distance(camPos,targetPos) > 10)
+    if (FVector::Distance(camPos,targetPos) > 1.0F)
     {
         FVector dir = targetPos - camPos;
         dir.Normalize();
@@ -88,6 +90,7 @@ void AMyCameraController::moveCameraUp(float Value)
     if (Value != 0)
     {
         playerInput = true;
+        afkDetection->setRevievedInput(playerInput); 
         FRotator playerRot = GetActorRotation();
         playerRot.Pitch += rotationSpeed * Value * deltaTime;
         playerRot.Pitch = FMath::ClampAngle(playerRot.Pitch, -55, -10);
@@ -97,6 +100,7 @@ void AMyCameraController::moveCameraUp(float Value)
     else
     {
         playerInput = false;
+        afkDetection->setRevievedInput(playerInput); 
     }
 }
 
