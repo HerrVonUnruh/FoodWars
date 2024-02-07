@@ -8,7 +8,7 @@ AMyCameraController::AMyCameraController()
 
 AMyCameraController::~AMyCameraController()
 {
-    //delete camHelper;
+    delete camHelper;
 }
 
 void AMyCameraController::BeginPlay()
@@ -17,7 +17,7 @@ void AMyCameraController::BeginPlay()
     rotIndex = 0;
     deltaTime = 0;
     SetActorLocation(center);
-    setMaxPlayerIndex(0); 
+    setPositionRef();
     resetPlayerPosition();
 }
 
@@ -28,8 +28,17 @@ void AMyCameraController::Tick(float DeltaTime)
     if (myCamera != nullptr && camHelper == nullptr)
     {
         camHelper = new MyCameraHelper(myCamera, center);
-        myCamera->SetWorldLocation(camHelper->setCameraPosition(2750)); 
+        myCamera->SetWorldLocation(camHelper->setCameraPosition(2750));
     }
+    if (cameraViewPos.Num() > 0 && settedCamPos == false)
+    {
+        for (AActor *pos : cameraViewPos)
+        {
+            pos->SetActorLocation(camHelper->setPlayerPositions(pos->GetActorLocation(), 2500));
+        }
+        settedCamPos = true;
+    }
+
     deltaTime = DeltaTime;
     afkDetection->IncreaseAFkTimer(DeltaTime);
 
@@ -96,7 +105,6 @@ void AMyCameraController::camAutoMovement()
         }
         else
         {
-            UE_LOG(LogTemp, Warning, TEXT("Finieshed switching turn!"));
             switchTurn = false;
             moveCameraToPos = false;
             allowPlayerInput = true;
@@ -151,9 +159,8 @@ void AMyCameraController::switchPlayerTurn()
     {
         rotIndex = 0;
     }
-    UE_LOG(LogTemp, Warning, TEXT("rotation index: %d"), rotIndex);
 
-    if (rotIndex >= 0 && rotIndex < viewRotations.Num())
+    if (rotIndex >= 0 && rotIndex < cameraViewPos.Num())
     {
         switchTurn = true;
         allowPlayerInput = false;
@@ -161,6 +168,8 @@ void AMyCameraController::switchPlayerTurn()
     else
     {
         allowPlayerInput = true;
+        FString Message = FString::Printf(TEXT("couldnt find Actor in cameraViewPos at:  %d"), rotIndex);
+        return;
     }
 }
 
@@ -193,14 +202,14 @@ int AMyCameraController::getPlayerID()
 
 void AMyCameraController::setMaxPlayerIndex(int value)
 {
-    maxPlayer = viewRotations.Num();
+    maxPlayerIndex = value;
 }
 
 void AMyCameraController::resetPlayerPosition()
 {
     if (!playerInput)
     {
-        if (rotIndex >= 0 && rotIndex < viewRotations.Num())
+        if (rotIndex >= 0 && rotIndex < cameraViewPos.Num())
         {
             moveCameraToPos = true;
         }
@@ -212,7 +221,6 @@ void AMyCameraController::resetPlayerPosition()
         }
     }
 }
-
 
 MyCameraHelper::MyCameraHelper(UCameraComponent *camera, FVector center)
     : m_Center(center)
