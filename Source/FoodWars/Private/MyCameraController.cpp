@@ -87,13 +87,11 @@ void AMyCameraController::camAutoMovement()
     if (rotIndex >= 0 && rotIndex < viewRotations.Num())
     {
         FRotator desiredRotation = viewRotations[rotIndex]; // desiredRotation innerhalb des if-Blocks deklarieren
-
         float difference = GetActorRotation().Yaw - desiredRotation.Yaw; 
-        if (FMath::Abs(difference) > 5)
+        UE_LOG(LogTemp, Warning, TEXT("target rotation: %f"), difference);
+        if (FMath::Abs(difference) > 10)
         {
-            desiredRotation.Normalize(); 
-            FRotator rotTimesSpeed = desiredRotation * (rotationSpeed * deltaTime);   
-            FRotator newRot = FMath::RInterpTo(GetActorRotation(), rotTimesSpeed, deltaTime, 1); 
+            FRotator newRot = FMath::Lerp(GetActorRotation(), desiredRotation, 1 * deltaTime);
             SetActorRotation(newRot); 
         }
         else
