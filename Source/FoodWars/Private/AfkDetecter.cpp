@@ -42,7 +42,7 @@ void AAfkDetecter::IncreaseAFkTimer(float deltaTime)
 		timeSpendAfk += deltaTime; 
 		if(timeSpendAfk >= 10)
 		{
- 			UE_LOG(LogTemp, Warning, TEXT("No  input detected!"));
+ 			//UE_LOG(LogTemp, Warning, TEXT("No  input detected!"));
 			timeSpendAfk=0; 
 		}
 	}else 
@@ -54,11 +54,9 @@ void AAfkDetecter::IncreaseAFkTimer(float deltaTime)
 void AAfkDetecter::setRevievedInput(bool val)
 {
 	recievedInput=val; 
-	UE_LOG(LogTemp, Warning, TEXT("Input detected!"));
 }
 // Called to bind functionality to input
 void AAfkDetecter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent); 
- 
 }
