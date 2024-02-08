@@ -112,14 +112,11 @@ void AMyCameraController::moveCameraUp(float Value)
     {
         playerInput = true;
         afkDetection->setRevievedInput(playerInput);
-
-        // Berechnen Sie die neue Pitch-Rotation
         float currentPitch = GetActorRotation().Pitch;
         float desiredPitchChange = rotationSpeed * Value * deltaTime;
-        float newPitch = FMath::Clamp(currentPitch + desiredPitchChange, -55.0f, 20.0f);
+        float newPitch = FMath::Clamp(currentPitch + desiredPitchChange, -60.0f, -10.0f);
 
-        // Überprüfen Sie, ob die Kamera die Grenzen überschreitet, und setzen Sie die Bewegung auf Null, wenn sie es tut
-        if ((currentPitch <= -55.0f && newPitch < currentPitch) || (currentPitch >= 20.0f && newPitch > currentPitch))
+        if ((currentPitch <= -60.0f && newPitch < currentPitch) || (currentPitch >= -10.0f && newPitch > currentPitch))
         {
             newPitch = currentPitch;
         }
@@ -127,7 +124,7 @@ void AMyCameraController::moveCameraUp(float Value)
         // Interpolieren Sie die Pitch-Rotation sanft
         FRotator targetRotation = GetActorRotation();
         targetRotation.Pitch = newPitch;
-        FRotator newRotation = FMath::RInterpTo(GetActorRotation(), targetRotation, deltaTime, 10.0f);
+        FRotator newRotation = FMath::RInterpTo(GetActorRotation(), targetRotation, deltaTime, 3);
 
         // Setzen Sie die neue Rotation des Actors
         SetActorRotation(newRotation);
