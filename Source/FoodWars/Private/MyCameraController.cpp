@@ -1,36 +1,48 @@
 #include "MyCameraController.h"
 
-// Sets default values
 AMyCameraController::AMyCameraController()
 {
-    // Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
+    afkDetection = CreateDefaultSubobject<AAfkDetecter>(TEXT("AfkDetector"));
 }
 
-// Called when the game starts or when spawned
+AMyCameraController::~AMyCameraController()
+{
+    //delete camHelper;
+}
+
 void AMyCameraController::BeginPlay()
 {
     Super::BeginPlay();
     rotIndex = 0;
     deltaTime = 0;
     SetActorLocation(center);
-    setPositionRef();
+    setMaxPlayerIndex(0); 
     resetPlayerPosition();
 }
 
-// Called every frame
 void AMyCameraController::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    deltaTime = DeltaTime;
-    if(switchTurn || moveCameraToPos)
+
+    if (myCamera != nullptr && camHelper == nullptr)
     {
-        camAutoMovement(); 
-        lookAt(); 
+        camHelper = new MyCameraHelper(myCamera, center);
+        myCamera->SetWorldLocation(camHelper->setCameraPosition(2750)); 
+    }
+    deltaTime = DeltaTime;
+    afkDetection->IncreaseAFkTimer(DeltaTime);
+
+    if (switchTurn || moveCameraToPos)
+    {
+        camAutoMovement();
+    }
+    else if (playerInput)
+    {
+        lookAt();
     }
 }
 
-// Called to bind functionality to input
 void AMyCameraController::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -40,65 +52,94 @@ void AMyCameraController::SetupPlayerInputComponent(UInputComponent *PlayerInput
 
 void AMyCameraController::moveCameraHorizontal(float Value)
 {
-    if (Value != 0)
+    if (Value != 0 && allowPlayerInput)
     {
         playerInput = true;
+        afkDetection->setRevievedInput(playerInput);
         FRotator playerRot = GetActorRotation();
-        playerRot.Yaw += rotationSpeed * Value * deltaTime * -1;
+        playerRot.Yaw -= rotationSpeed * Value * deltaTime;
         FRotator newRot = FMath::RInterpTo(GetActorRotation(), playerRot, deltaTime, 1.3);
         SetActorRotation(newRot);
     }
     else
     {
         playerInput = false;
+        afkDetection->setRevievedInput(playerInput);
     }
 }
 
 void AMyCameraController::lookAt()
 {
-    FVector CameraLocation = MyCamera->GetComponentLocation();
-    FVector SceneRootLocation = GetActorLocation();
-    FVector DirectionToSceneRoot = SceneRootLocation - CameraLocation;
-    DirectionToSceneRoot.Normalize();
-    FRotator TargetRotation = DirectionToSceneRoot.Rotation();
-    FRotator NewRot = FMath::RInterpTo(GetActorRotation(), TargetRotation, deltaTime, 2);
-    SetActorRotation(NewRot);
+    if (myCamera != nullptr)
+    {
+        FVector CameraLocation = myCamera->GetComponentLocation();
+        FVector SceneRootLocation = GetActorLocation();
+        FVector DirectionToSceneRoot = SceneRootLocation - CameraLocation;
+        DirectionToSceneRoot.Normalize();
+        FRotator TargetRotation = DirectionToSceneRoot.Rotation();
+        FRotator NewRot = FMath::RInterpTo(GetActorRotation(), TargetRotation, deltaTime, 2);
+        SetActorRotation(NewRot);
+    }
 }
 
 void AMyCameraController::camAutoMovement()
 {
-    FVector camPos = MyCamera->GetComponentLocation();
-    FVector targetPos = cameraViewPos[rotIndex]->GetActorLocation();
-    if (FVector::Distance(camPos,targetPos) > 0.1F)
+    if (rotIndex >= 0 && rotIndex < viewRotations.Num())
     {
-        FVector dir = targetPos - camPos;
-        dir.Normalize();
-        camPos += dir * rotationSpeed;
-        FVector newPos = FMath::VInterpTo(MyCamera->GetComponentLocation(), camPos, deltaTime, 1.3F);
-        MyCamera->SetWorldLocation(newPos);
-    } else 
-    {
-        switchTurn = false; 
-        moveCameraToPos = false; 
-        allowPlayerInput= true; 
+        FRotator desiredRotation = viewRotations[rotIndex]; // desiredRotation innerhalb des if-Blocks deklarieren
+        float difference = GetActorRotation().Yaw - desiredRotation.Yaw; 
+        UE_LOG(LogTemp, Warning, TEXT("target rotation: %f"), difference);
+        if (FMath::Abs(difference) > 10)
+        {
+            FRotator newRot = FMath::Lerp(GetActorRotation(), desiredRotation, 1 * deltaTime);
+            SetActorRotation(newRot); 
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Finieshed switching turn!"));
+            switchTurn = false;
+            moveCameraToPos = false;
+            allowPlayerInput = true;
+        }
     }
 }
+
+
+
 void AMyCameraController::moveCameraUp(float Value)
 {
-    if (Value != 0)
+    if (Value != 0 && allowPlayerInput)
     {
         playerInput = true;
-        FRotator playerRot = GetActorRotation();
-        playerRot.Pitch += rotationSpeed * Value * deltaTime;
-        playerRot.Pitch = FMath::ClampAngle(playerRot.Pitch, -55, -10);
-        FRotator newRot = FMath::RInterpTo(GetActorRotation(), playerRot, deltaTime, 1.3);
-        SetActorRotation(newRot);
+        afkDetection->setRevievedInput(playerInput);
+
+        // Berechnen Sie die neue Pitch-Rotation
+        float currentPitch = GetActorRotation().Pitch;
+        float desiredPitchChange = rotationSpeed * Value * deltaTime;
+        float newPitch = FMath::Clamp(currentPitch + desiredPitchChange, -55.0f, 20.0f);
+
+        // Überprüfen Sie, ob die Kamera die Grenzen überschreitet, und setzen Sie die Bewegung auf Null, wenn sie es tut
+        if ((currentPitch <= -55.0f && newPitch < currentPitch) || (currentPitch >= 20.0f && newPitch > currentPitch))
+        {
+            newPitch = currentPitch;
+        }
+
+        // Interpolieren Sie die Pitch-Rotation sanft
+        FRotator targetRotation = GetActorRotation();
+        targetRotation.Pitch = newPitch;
+        FRotator newRotation = FMath::RInterpTo(GetActorRotation(), targetRotation, deltaTime, 10.0f);
+
+        // Setzen Sie die neue Rotation des Actors
+        SetActorRotation(newRotation);
     }
     else
     {
         playerInput = false;
+        afkDetection->setRevievedInput(playerInput);
     }
 }
+
+
 
 void AMyCameraController::switchPlayerTurn()
 {
@@ -110,27 +151,27 @@ void AMyCameraController::switchPlayerTurn()
     {
         rotIndex = 0;
     }
-    if (rotIndex >= 0 && rotIndex < cameraViewPos.Num())
+    UE_LOG(LogTemp, Warning, TEXT("rotation index: %d"), rotIndex);
+
+    if (rotIndex >= 0 && rotIndex < viewRotations.Num())
     {
-        switchTurn = true; 
-        allowPlayerInput = false; 
+        switchTurn = true;
+        allowPlayerInput = false;
     }
     else
     {
         allowPlayerInput = true;
-        FString Message = FString::Printf(TEXT("couldnt find Actor in cameraViewPos at:  %d"), rotIndex);
-        return;
     }
 }
 
 void AMyCameraController::setCamera(UCameraComponent *cam)
 {
-    MyCamera = cam;
+    myCamera = cam;
 }
 
 void AMyCameraController::setPositionRef()
 {
-    for (int x = 0; x <= (maxPlayer - 1); x++)
+    for (int x = 0; x < maxPlayer; x++)
     {
         if (x >= 0 && x < cameraViewPos.Num())
         {
@@ -152,22 +193,53 @@ int AMyCameraController::getPlayerID()
 
 void AMyCameraController::setMaxPlayerIndex(int value)
 {
-    maxPlayerIndex = value;
+    maxPlayer = viewRotations.Num();
 }
 
 void AMyCameraController::resetPlayerPosition()
 {
-    if (playerInput == false)
+    if (!playerInput)
     {
-        if (rotIndex >= 0 && rotIndex < cameraViewPos.Num())
+        if (rotIndex >= 0 && rotIndex < viewRotations.Num())
         {
-            moveCameraToPos = true; 
+            moveCameraToPos = true;
         }
         else
         {
-            moveCameraToPos=false; 
+            moveCameraToPos = false;
             FString Message = FString::Printf(TEXT("couldnt find Actor in cameraViewPos at:  %d"), rotIndex);
             return;
         }
     }
+}
+
+
+MyCameraHelper::MyCameraHelper(UCameraComponent *camera, FVector center)
+    : m_Center(center)
+{
+    m_Camera = camera;
+}
+
+FVector MyCameraHelper::setCameraPosition(float distance)
+{
+    if (m_Camera == nullptr)
+    {
+        return FVector(0, 0, 0); // Early out!
+    }
+
+    FVector directionToCenter = m_Center - m_Camera->GetComponentLocation();
+    directionToCenter.Normalize();
+    FVector newCameraPos = m_Center - directionToCenter * distance;
+    m_Camera->SetWorldLocation(newCameraPos);
+
+    return newCameraPos;
+}
+
+FVector MyCameraHelper::setPlayerPositions(FVector position, float distance)
+{
+    FVector directionToCenter = m_Center - position;
+    directionToCenter.Normalize();
+    FVector newPos = m_Center - directionToCenter * distance;
+
+    return newPos;
 }
