@@ -58,7 +58,7 @@ void AMyCameraController::moveCameraHorizontal(float Value)
         afkDetection->setRevievedInput(playerInput);
         FRotator playerRot = GetActorRotation();
         playerRot.Yaw -= rotationSpeed * Value * deltaTime;
-        FRotator newRot = FMath::RInterpTo(GetActorRotation(), playerRot, deltaTime, 1.3);
+        FRotator newRot = FMath::RInterpTo(GetActorRotation(), playerRot, deltaTime, 4);
         SetActorRotation(newRot);
     }
     else
@@ -89,7 +89,7 @@ void AMyCameraController::camAutoMovement()
         FRotator desiredRotation = viewRotations[rotIndex]; // desiredRotation innerhalb des if-Blocks deklarieren
         float difference = GetActorRotation().Yaw - desiredRotation.Yaw; 
         UE_LOG(LogTemp, Warning, TEXT("target rotation: %f"), difference);
-        if (FMath::Abs(difference) > 10)
+        if (FMath::Abs(difference) > 1)
         {
             FRotator newRot = FMath::Lerp(GetActorRotation(), desiredRotation, 1 * deltaTime);
             SetActorRotation(newRot); 
@@ -127,7 +127,7 @@ void AMyCameraController::moveCameraUp(float Value)
         // Interpolieren Sie die Pitch-Rotation sanft
         FRotator targetRotation = GetActorRotation();
         targetRotation.Pitch = newPitch;
-        FRotator newRotation = FMath::RInterpTo(GetActorRotation(), targetRotation, deltaTime, 10.0f);
+        FRotator newRotation = FMath::RInterpTo(GetActorRotation(), targetRotation, deltaTime, 15.0f);
 
         // Setzen Sie die neue Rotation des Actors
         SetActorRotation(newRotation);
